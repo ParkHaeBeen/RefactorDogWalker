@@ -1,0 +1,205 @@
+plugins {
+    id "org.flywaydb.flyway" version "10.0.0"
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'jacoco'
+}
+
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+
+configurations {
+    asciidoctorExt
+}
+
+dependencies {
+    //domain
+    implementation(project(":core"))
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    //임시 db
+    implementation 'com.h2database:h2'
+    implementation 'mysql:mysql-connector-java:8.0.28'
+
+
+    //flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+
+    //aws s3
+    implementation 'software.amazon.awssdk:s3:2.17.123'
+
+    // redis
+    /*  implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+      implementation 'org.redisson:redisson-spring-boot-starter:3.19.3'*/
+
+
+    //spatial
+    implementation 'org.hibernate:hibernate-spatial:6.2.2.Final'
+    implementation 'org.locationtech.jts:jts-core:1.18.2'
+
+    //batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+    //querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.batch:spring-batch-test'
+    testImplementation 'org.mockito:mockito-core:4.9.0'
+    testImplementation 'org.mockito:mockito-inline:4.9.0'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder-jammy-base:latest'
+}
+
+tasks.named('test') {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+    jacoco{
+        excludes += [
+                "**/*Application*",
+                "**/exception/**",
+                "**/dto/**",
+                "**/querydsl/**",
+                "**/common/**",
+                "**/domain/**",
+                "**/member/aws/**",
+                "**/member/client/**",
+                "**/member/token/**",
+                "**/batch/**",
+                "*.Q*"
+        ]
+    }
+    finalizedBy jacocoTestReport
+}
+
+//querydsl 추가 시작
+clean {
+    delete file('src/main/generated')
+}
+//querydsl 추가 끝
+
+tasks.named('asciidoctor') {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("${asciidoctor.outputDir}")
+    into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn copyDocument
+}
+
+//jacoco
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.required = true
+
+        xml.destination file("${buildDir}/jacoco/index.xml")
+        csv.destination file("${buildDir}/jacoco/index.csv")
+        html.destination file("${buildDir}/jacoco/index.html")
+    }
+    // dependsOn : 이 작업에 지정된 종속성을 추가
+    dependsOn test // jacocoTestReport 에 test라는 종속성을 추가
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                            "**/common/*",
+                            "**/*Application*",
+                            "**/exception/**",
+                            "**/dto/**",
+                            "**/querydsl/*",
+                            "**/common/*",
+                            "**/domain/*",
+                            "**/member/aws/*",
+                            "**/member/client/*",
+                            "**/member/token/*",
+                            "**/batch/**",
+                            "*.Q*"
+                    ])
+                })
+        )
+    }
+    finalizedBy "jacocoTestCoverageVerification"
+}
+
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = "CLASS"
+
+            // 모든 클래스 각각 라인 커버리지 75% 만족시 빌드 성공
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.75
+
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.75
+
+            }
+
+            excludes = [
+                    "**.common.**",
+                    "*.*Application*",
+                    "**.exception.**",
+                    "**.dto.**",
+                    "**.querydsl.**",
+                    "**.domain.**",
+                    "**.aws.**",
+                    "**.client.**",
+                    "**.token.**",
+                    "**.batch.**",
+                    "*.Q*"
+
+            ]
+        }
+    }
+}
+

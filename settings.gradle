@@ -1,4 +1,5 @@
 rootProject.name = 'RefactorDogWalker'
 include 'core'
 include 'customer'
+include 'walker'
 
