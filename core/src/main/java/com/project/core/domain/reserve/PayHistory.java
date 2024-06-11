@@ -18,32 +18,27 @@ import static com.project.core.domain.reserve.PayStatus.PAY_DONE;
 @Builder
 @Table(name = "pay_history")
 public class PayHistory extends BaseEntity {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "pay_history_id")
-  private Long payId;
-
+  @Column(name = "id")
+  private Long id;
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User customer;
 
-
-  @Column(name = "pay_price")
-  private int payPrice;
-
+  @Column(name = "price")
+  private int price;
 
   @Builder.Default
-  @Column(name = "pay_status",nullable = false)
+  @Column(name = "status",nullable = false)
   @Enumerated(EnumType.STRING)
-  private PayStatus payStatus= PAY_DONE;
+  private PayStatus status = PAY_DONE;
 
-  @Column(name = "pay_method",nullable = false)
-  private String payMethod;
+  @Column(name = "method",nullable = false)
+  private String method;
 
   @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
-  @JoinColumn(name = "walker_reserve_service_id")
-  private WalkerReserveServiceInfo walkerReserveInfo;
-
+  @JoinColumn(name = "walker_reserve_id")
+  private WalkerReserve reserve;
 }

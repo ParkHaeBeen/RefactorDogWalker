@@ -20,23 +20,23 @@ public class WalkerAdjustDetail {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "walker_adjust_detail_id")
-  private Long walkerAdjustDetailId;
+  @Column(name = "id")
+  private Long id;
 
   @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
   @JoinColumn(name = "walker_adjust_id", nullable = false)
   private WalkerAdjust walkerAdjust;
 
   @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-  @JoinColumn(name = "pay_history_id", nullable = false)
+  @JoinColumn(name = "pay_history_id", nullable = false, unique = true)
   private PayHistory payHistory;
 
-  @Column(name = "walker_adjust_price",nullable = false)
-  private Integer walkerAdjustPrice;
+  @Column(name = "price",nullable = false)
+  private Integer price;
 
-  @Column(name = "walker_adjust_status", nullable = false)
+  @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
   @Builder.Default
-  private AdjustDetailStatus adjustDetailStatus= ADJUST_NOT_YET;
+  private AdjustDetailStatus status= ADJUST_NOT_YET;
 
 }

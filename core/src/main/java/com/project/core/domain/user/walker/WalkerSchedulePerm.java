@@ -6,26 +6,24 @@ import lombok.*;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@ToString
 @Table(name = "walker_schedule_perm")
 public class WalkerSchedulePerm {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "walker_sc_id")
-  private Long walkerScId;
+  @Column(name = "id")
+  private Long id;
 
-  @Column(name = "walker_id",nullable = false)
+  @Column(name = "user_id",nullable = false)
   private Long walkerId;
 
-  @Column(name = "unavailable_day",nullable = false)
+  @Column(name = "unavail_day",nullable = false)
   private String dayOfWeek;
 
-  @Column(name = "unavailable_time_start",nullable = false)
+  @Column(name = "unavail_time_start",nullable = false)
   private Integer startTime;
 
-  @Column(name = "unavailable_time_end",nullable = false)
+  @Column(name = "unavail_time_end",nullable = false)
   private Integer endTime;
 }

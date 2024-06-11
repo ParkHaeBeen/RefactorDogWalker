@@ -1,43 +1,36 @@
 package com.project.core.domain.user.customer;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Table(name = "customer_dog")
 public class CustomerDog {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "dog_id",nullable = false)
-  private Long customerDogId;
+  @Column(name = "id", nullable = false)
+  private Long id;
 
-  @Column(name = "user_id")
-  private Long masterId;
+  @Column(name = "user_id", nullable = false)
+  private Long userId;
 
-  @Column(name = "dog_img_url",nullable = false)
-  private String dogImgUrl;
+  @Column(name = "img_url", nullable = false)
+  private String imgUrl;
 
-  @Column(name = "dog_birth_date",nullable = false)
-  private LocalDateTime dogBirth;
+  @Column(name = "birth_at", nullable = false)
+  private LocalDateTime birth;
 
-  @Column(name = "dog_name",nullable = false)
-  private String dogName;
+  @Column(name = "name", nullable = false)
+  private String name;
 
-  @Column(name = "dog_type",nullable = false)
-  private String dogType;
+  @Column(name = "type", nullable = false)
+  private String type;
 
-  @Column(name = "dog_description",nullable = false)
-  private String dogDescription;
-
-
+  @Column(name = "description", nullable = false)
+  private String description;
 }
