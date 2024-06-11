@@ -16,7 +16,7 @@ import static com.project.core.domain.reserve.WalkerServiceStatus.WALKER_CHECKIN
 @Table(name = "walker_reserve",uniqueConstraints={
     @UniqueConstraint(
         name="unique_walker_datetime",
-        columnNames={"walker_id", "walker_service_date"}
+        columnNames={"walker_id", "date"}
     )
 })
 public class WalkerReserve extends BaseEntity {

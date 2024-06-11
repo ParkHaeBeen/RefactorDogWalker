@@ -33,7 +33,7 @@ public class PayHistory extends BaseEntity {
   @Builder.Default
   @Column(name = "status",nullable = false)
   @Enumerated(EnumType.STRING)
-  private PayStatus status= PAY_DONE;
+  private PayStatus status = PAY_DONE;
 
   @Column(name = "method",nullable = false)
   private String method;

@@ -25,9 +25,6 @@ public class WalkerAdjust extends BaseEntity {
   @Column(name = "user_id", nullable = false)
   private Long userId;
 
-  @Column(name = "date", nullable = false)
-  private LocalDate date;
-
   @Column(name = "price", nullable = false)
   @Builder.Default
   private Long price=0L;
@@ -46,5 +43,4 @@ public class WalkerAdjust extends BaseEntity {
   @OneToMany(mappedBy = "walkerAdjust",fetch = FetchType.LAZY)
   @Builder.Default
   private List <WalkerAdjustDetail> adjustDetailList=new ArrayList <>();
-
 }

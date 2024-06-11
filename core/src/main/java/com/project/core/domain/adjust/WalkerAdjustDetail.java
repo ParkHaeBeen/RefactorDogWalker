@@ -28,7 +28,7 @@ public class WalkerAdjustDetail {
   private WalkerAdjust walkerAdjust;
 
   @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-  @JoinColumn(name = "pay_history_id", nullable = false)
+  @JoinColumn(name = "pay_history_id", nullable = false, unique = true)
   private PayHistory payHistory;
 
   @Column(name = "price",nullable = false)

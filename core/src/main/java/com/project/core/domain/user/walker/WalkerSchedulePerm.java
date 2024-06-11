@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@ToString
 @Table(name = "walker_schedule_perm")
 public class WalkerSchedulePerm {
   @Id
@@ -19,12 +18,12 @@ public class WalkerSchedulePerm {
   @Column(name = "user_id",nullable = false)
   private Long walkerId;
 
-  @Column(name = "unavailable_day",nullable = false)
+  @Column(name = "unavail_day",nullable = false)
   private String dayOfWeek;
 
-  @Column(name = "unavailable_time_start",nullable = false)
+  @Column(name = "unavail_time_start",nullable = false)
   private Integer startTime;
 
-  @Column(name = "unavailable_time_end",nullable = false)
+  @Column(name = "unavail_time_end",nullable = false)
   private Integer endTime;
 }
