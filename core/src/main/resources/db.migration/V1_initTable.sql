@@ -3,8 +3,7 @@ CREATE TABLE `users` (
                          `id`	BIGINT AUTO_INCREMENT PRIMARY KEY,
                          `email`	varchar(100) UNIQUE NOT NULL,
                          `phone_number`	varchar(20)	NOT NULL,
-                         `lat`	double	NOT NULL,
-                         `lnt`	double	NOT NULL,
+                         `location` GEOMETRY NOT NULL ,
                          `role`	varchar(10)	NOT NULL,
                          `name`	varchar(100)	NOT NULL,
                          `created_at`	DATE	NOT NULL,
@@ -15,11 +14,11 @@ CREATE TABLE `customer_dog` (
                                      `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
                                      `user_id` BIGINT NOT NULL,
                                      `img_url` VARCHAR(100) NOT NULL,
-                                     `birth_date` DATE NOT NULL,
+                                     `birth_at` DATE NOT NULL,
                                      `name` VARCHAR(10) NOT NULL,
                                      `type` VARCHAR(20) NOT NULL,
                                      `description` VARCHAR(500) NOT NULL,
-                                     FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                                     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 );
 
 CREATE TABLE `walker_service_price` (
@@ -27,7 +26,7 @@ CREATE TABLE `walker_service_price` (
                                         `walker_id`	bigint	NOT NULL,
                                         `walker_service_unit`	int	NOT NULL,
                                         `walker_service_fee`	int	NOT NULL,
-                                        FOREIGN KEY (`walker_id`) REFERENCES `users` (`user_id`)
+                                        FOREIGN KEY (`walker_id`) REFERENCES `users` (`id`)
 
 );
 
@@ -35,7 +34,7 @@ CREATE TABLE `walker_schedule_temporary` (
                                              `walker_sc_temp_id`	BIGINT AUTO_INCREMENT PRIMARY KEY,
                                              `walker_Id`	bigint	NOT NULL,
                                              `unavailable_date`	DATE	NOT NULL,
-                                             FOREIGN KEY (`walker_id`) REFERENCES `users` (`user_id`)
+                                             FOREIGN KEY (`walker_id`) REFERENCES `users` (`id`)
 
 );
 
@@ -45,7 +44,7 @@ CREATE TABLE `walker_schedule_perm` (
                                    `unavailable_day`	varchar(4) NOT NULL,
                                    `unavailable_time_start`	int	NOT NULL,
                                    `unavailable_time_end`	int	NOT NULL,
-                                   FOREIGN KEY (`walker_id`) REFERENCES `users` (`user_id`)
+                                   FOREIGN KEY (`walker_id`) REFERENCES `users` (`id`)
 
 );
 
@@ -60,8 +59,8 @@ CREATE TABLE `walker_reserve_service` (
                                           `updated_at`	DATE NOT NULL,
                                           `walker_reserve_service_price` int NOT NULL,
                                           UNIQUE KEY unique_walker_datetime (walker_id, walker_service_date),
-                                          FOREIGN KEY (`walker_id`) REFERENCES `users` (`user_id`),
-                                          FOREIGN KEY (`customer_id`) REFERENCES `users` (`user_id`)
+                                          FOREIGN KEY (`walker_id`) REFERENCES `users` (`id`),
+                                          FOREIGN KEY (`customer_id`) REFERENCES `users` (`id`)
 );
 
 CREATE TABLE `walker_service_route` (
@@ -83,7 +82,7 @@ CREATE TABLE `pay_history` (
                                `created_at`	DATE NOT NULL,
                                `updated_at`	DATE NOT NULL,
                                `pay_method`	varchar(50) NOT NULL,
-                               FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                               FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
                                FOREIGN KEY (`walker_reserve_service_id`) REFERENCES `walker_reserve_service` (`walker_reserve_service_id`)
 
 );
@@ -98,7 +97,7 @@ CREATE TABLE `walker_adjust` (
                                  `walker_adjust_period_end` DATE NOT NULL,
                                  `created_at`	DATE	NOT NULL,
                                  `updated_at`	DATE	NOT NULL,
-                                 FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                                 FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 
 );
 
