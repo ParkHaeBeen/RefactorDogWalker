@@ -8,21 +8,18 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@ToString
-@Table(name = "walker_schedule_temporary")
+@Table(name = "walker_schedule_temp")
 public class WalkerScheduleTemp {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "walker_sc_temp_id")
-  private Long walkerScTempId;
+  @Column(name = "id")
+  private Long id;
 
-  @Column(name = "walker_id",nullable = false)
+  @Column(name = "user_id",nullable = false)
   private Long walkerId;
 
-  @Column(name = "unavailable_date",nullable = false)
-  private LocalDate dateTime;
-
+  @Column(name = "unavailable_at",nullable = false)
+  private LocalDate unAvailAt;
 }

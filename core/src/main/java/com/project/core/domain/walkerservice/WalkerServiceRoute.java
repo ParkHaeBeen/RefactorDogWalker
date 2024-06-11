@@ -1,7 +1,8 @@
 package com.project.core.domain.walkerservice;
 
-import com.project.core.domain.reserve.WalkerReserveServiceInfo;
+import com.project.core.domain.reserve.WalkerReserve;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,19 +16,18 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @Table(name = "walker_service_route")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WalkerServiceRoute {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "walker_service_route_id",nullable = false)
-  private Long routeId;
+  @Column(name = "id",nullable = false)
+  private Long id;
 
   @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "walker_reserve_service_id")
-  private WalkerReserveServiceInfo reserveInfo;
+  @JoinColumn(name = "walker_reserve_id")
+  private WalkerReserve reserve;
 
-  @Column(name = "walker_route", nullable = false)
+  @Column(name = "route", nullable = false)
   private Geometry routes;
 
   @CreatedDate
