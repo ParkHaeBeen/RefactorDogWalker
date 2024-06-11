@@ -1,0 +1,14 @@
+plugins {
+
+}
+
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.hibernate:hibernate-spatial:6.2.2.Final'
+    implementation 'org.locationtech.jts:jts-core:1.18.2'
+}

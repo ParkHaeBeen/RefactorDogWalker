@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    include:
+      - core
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/dogWalker?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: dogWalker
+    password: dogWalker
+  flyway:
+    enabled: true
+    user: dogWalker
+    password: dogWalker
+    baseline-on-migrate: true
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
