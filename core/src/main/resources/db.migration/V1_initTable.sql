@@ -1,24 +1,24 @@
 use dogWalker;
 CREATE TABLE `users` (
-                         `user_id`	BIGINT AUTO_INCREMENT PRIMARY KEY,
-                         `user_email`	varchar(100) UNIQUE NOT NULL,
-                         `user_phone_number`	varchar(20)	NOT NULL,
-                         `user_lat`	double	NOT NULL,
-                         `user_lnt`	double	NOT NULL,
-                         `user_role`	varchar(10)	NOT NULL,
-                         `user_name`	varchar(100)	NOT NULL,
+                         `id`	BIGINT AUTO_INCREMENT PRIMARY KEY,
+                         `email`	varchar(100) UNIQUE NOT NULL,
+                         `phone_number`	varchar(20)	NOT NULL,
+                         `lat`	double	NOT NULL,
+                         `lnt`	double	NOT NULL,
+                         `role`	varchar(10)	NOT NULL,
+                         `name`	varchar(100)	NOT NULL,
                          `created_at`	DATE	NOT NULL,
                          `updated_at`	DATE	NOT NULL
 );
 
 CREATE TABLE `customer_dog` (
-                                     `dog_id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
                                      `user_id` BIGINT NOT NULL,
-                                     `dog_img_url` VARCHAR(100) NOT NULL,
-                                     `dog_birth_date` DATE NOT NULL,
-                                     `dog_name` VARCHAR(10) NOT NULL,
-                                     `dog_type` VARCHAR(20) NOT NULL,
-                                     `dog_description` VARCHAR(500) NOT NULL,
+                                     `img_url` VARCHAR(100) NOT NULL,
+                                     `birth_date` DATE NOT NULL,
+                                     `name` VARCHAR(10) NOT NULL,
+                                     `type` VARCHAR(20) NOT NULL,
+                                     `description` VARCHAR(500) NOT NULL,
                                      FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 );
 
