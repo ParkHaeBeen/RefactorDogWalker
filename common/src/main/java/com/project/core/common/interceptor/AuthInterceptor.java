@@ -41,7 +41,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private void validateToken(final HttpServletRequest request) {
         final String authHeader=request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if(!tokenProvider.validateToken(authHeader)){
+        if(!tokenProvider.validateAccessToken(authHeader)){
             throw new RuntimeException("token expired");
         }
     }

@@ -25,7 +25,7 @@ configurations {
 
 dependencies {
     //domain
-    implementation(project(":core"))
+    implementation(project(":common"))
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -45,8 +45,8 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:2.17.123'
 
     // redis
-  /*  implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.redisson:redisson-spring-boot-starter:3.19.3'*/
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.19.3'
 
 
     //spatial
