@@ -12,6 +12,7 @@ public class RefreshTokenService {
     private final TokenProvider tokenProvider;
 
     private long REFRESH_TOKEN_EXPIRE_TIME;
+
     private static final String REDIS_REFRESH = "REDIS_REFRESH";
 
     public String generateRefreshToken(final String email) {
@@ -27,7 +28,7 @@ public class RefreshTokenService {
     }
 
     public boolean validateToken(final String email) {
-        final String token = String.valueOf(redisService.getData(REDIS_REFRESH+email));
+        final String token = String.valueOf(redisService.getData(REDIS_REFRESH + email));
 
         if(token.isBlank() || !tokenProvider.validateRefreshToken(token)) {
             return false;

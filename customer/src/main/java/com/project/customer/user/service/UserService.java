@@ -102,7 +102,7 @@ public class UserService {
                 () -> new UserException(NOT_EXIST_MEMBER)
         );
 
-        final String newAccessToken = tokenProvider.generateAccessToken(user.getEmail() , user.getRole());
+        final String newAccessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole());
         final String newRefreshToken = refreshTokenService.generateRefreshToken(email);
 
         return UserTokenResponse.builder()
