@@ -45,3 +45,9 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+project(":customer") {
+    dependencies {
+        implementation(project(":common"))
+    }
+}

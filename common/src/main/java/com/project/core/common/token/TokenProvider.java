@@ -14,10 +14,10 @@ import java.util.Date;
 @Component
 public class TokenProvider {
 
-    @Value("${security.jwt.expire-length}")
+    @Value("${security.jwt.expire}")
     private long ACCESS_TOKEN_EXPIRE_TIME;
 
-    @Value("${security.jwt.secret-key}")
+    @Value("${security.jwt.secret}")
     private String SECRET_KEY;
 
     public static final String TOKEN_PREFIX="Bearer ";

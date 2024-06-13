@@ -15,5 +15,6 @@ public interface GoogleClient {
   GoogleTokenResponse getGoogleToken(final GoogleRequest request);
 
   @PostMapping("/tokeninfo")
-  GoogleResponse getGoogleDetailInfo(final String token);
+  GoogleResponse
+  getGoogleDetailInfo(final String token);
 }

@@ -24,9 +24,23 @@ spring:
   data:
     redis:
       host: localhost
-      port: 6379
+      port: 6378
 logging:
   level:
     org:
       hibernate:
         SQL: debug
+google:
+  auth:
+    url: url
+  client:
+    id: id
+    pw: pw
+  login:
+    url: login
+  redirect:
+    url: redirect
+security:
+  jwt:
+    expire: 1000
+    secret: dfjksldfjdsl
