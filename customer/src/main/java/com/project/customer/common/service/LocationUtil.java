@@ -7,8 +7,8 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LocationService {
-    public Point createPoint(final Double latitude, final Double longitude) {
+public class LocationUtil {
+    public static Point createPoint(final Double latitude, final Double longitude) {
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
         Coordinate coordinate = new Coordinate(longitude, latitude);
         return geometryFactory.createPoint(coordinate);

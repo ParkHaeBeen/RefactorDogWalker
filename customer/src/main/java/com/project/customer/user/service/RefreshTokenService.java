@@ -15,7 +15,7 @@ public class RefreshTokenService {
 
     private static final String REDIS_REFRESH = "REDIS_REFRESH";
 
-    public String generateRefreshToken(final String email) {
+    public String generateToken(final String email) {
         final String token = tokenProvider.generateRefreshToken(email, REFRESH_TOKEN_EXPIRE_TIME);
         redisService.addData(REDIS_REFRESH+email, token, REFRESH_TOKEN_EXPIRE_TIME);
         return token;

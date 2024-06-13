@@ -6,7 +6,7 @@ import com.project.core.common.token.TokenProvider;
 import com.project.core.domain.user.Role;
 import com.project.core.domain.user.User;
 import com.project.core.domain.user.customer.CustomerDog;
-import com.project.customer.common.service.LocationService;
+import com.project.customer.common.service.LocationUtil;
 import com.project.customer.exception.user.UserException;
 import com.project.customer.user.dto.response.UserJoinRequest;
 import com.project.customer.user.dto.response.UserJoinResponse;
@@ -29,7 +29,6 @@ public class UserService {
     private final RefreshTokenService refreshTokenService;
     private final GoogleOauth oauth;
     private final UserRepository userRepository;
-    private final LocationService locationService;
     private final CustomerDogRepository customerDogRepository;
 
     public String getLoginView( ){
@@ -39,12 +38,12 @@ public class UserService {
     @Transactional
     public UserLoginResponse login(final String code) {
         final GoogleResponse response = oauth.login(code);
-        final User user = userRepository.findByEmail(response.getEmail()).orElseThrow(
+        final User user = userRepository.findByEmail(response.email()).orElseThrow(
                 () -> new UserException(NOT_EXIST_MEMBER)
         );
 
         final String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole());
-        final String refreshToken = refreshTokenService.generateRefreshToken(user.getEmail());
+        final String refreshToken = refreshTokenService.generateToken(user.getEmail());
 
         return UserLoginResponse.builder()
                 .email(user.getEmail())
@@ -60,9 +59,9 @@ public class UserService {
 
         final User newUser = userRepository.save(
                 User.builder()
-                .email(user.getEmail())
-                .name(user.getName())
-                .location(locationService.createPoint(request.lat(), request.lnt()))
+                .email(user.email())
+                .name(user.name())
+                .location(LocationUtil.createPoint(request.lat(), request.lnt()))
                 .phoneNumber(request.phoneNumber())
                 .role(Role.USER)
                 .build()
@@ -80,7 +79,7 @@ public class UserService {
                 .build());
 
         final String accessToken = tokenProvider.generateAccessToken(newUser.getEmail(),newUser.getRole());
-        final String refreshToken = refreshTokenService.generateRefreshToken(user.getEmail());
+        final String refreshToken = refreshTokenService.generateToken(user.email());
 
         return UserJoinResponse.builder()
                 .name(newUser.getName())
@@ -103,7 +102,7 @@ public class UserService {
         );
 
         final String newAccessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole());
-        final String newRefreshToken = refreshTokenService.generateRefreshToken(email);
+        final String newRefreshToken = refreshTokenService.generateToken(email);
 
         return UserTokenResponse.builder()
                 .accessToken(newAccessToken)

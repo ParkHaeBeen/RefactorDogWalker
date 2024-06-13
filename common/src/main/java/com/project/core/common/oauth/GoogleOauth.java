@@ -40,10 +40,7 @@ public class GoogleOauth {
                 .grantType("authorization_code")
                 .build());
 
-        GoogleResponse response = googleClient.getGoogleDetailInfo(googleTokenResponse.getIdToken());
-        response.setIdToken(googleTokenResponse.getIdToken());
-
-        return response;
+        return googleClient.getGoogleDetailInfo(googleTokenResponse.getIdToken());
     }
 
     public GoogleResponse getUserInfo(final String accessToken){
