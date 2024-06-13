@@ -5,15 +5,20 @@ services:
     container_name: dogWalker_mysql
     ports:
       - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "dogWalker"
+      MYSQL_USER: "dogWalker"
+      MYSQL_PASSWORD: "dogWalker"
+      MYSQL_DATABASE: "dogWalker"
     networks:
-      - dogWalker_mysql
+      - dogWalker
   redis:
     image: redis:latest
     container_name: dogWalker_redis
     ports:
       - "6378:6379"
     networks:
-      - dogWalker_mysql
+      - dogWalker
 networks:
-  dogWalker_mysql:
+  dogWalker:
     driver: bridge
