@@ -45,6 +45,9 @@ class UserServiceTest {
     @Mock
     private CustomerDogRepository customerDogRepository;
 
+    @Mock
+    private ImgService imgService;
+
     @InjectMocks
     private UserService userService;
 
@@ -138,6 +141,7 @@ class UserServiceTest {
 
         given(googleOauth.getUserInfo(request.token())).willReturn(googleResponse);
         given(userRepository.save(any())).willReturn(user);
+        given(imgService.save(any())).willReturn("img");
         given(customerDogRepository.save(any())).willReturn(dog);
         given(tokenProvider.generateAccessToken(user.getEmail(), user.getRole())).willReturn(accessToken);
         given(refreshTokenService.generateToken(anyString())).willReturn(refreshToken);

@@ -30,6 +30,7 @@ public class UserService {
     private final GoogleOauth oauth;
     private final UserRepository userRepository;
     private final CustomerDogRepository customerDogRepository;
+    private final ImgService imgService;
 
     public String getLoginView( ){
         return oauth.getLoginView();
@@ -67,11 +68,11 @@ public class UserService {
                 .build()
         );
 
-        //TODO : S3이미지 업로드
+        final String imgUrl = imgService.save(dogImg);
 
         customerDogRepository.save(CustomerDog.builder()
                 .userId(newUser.getId())
-                .imgUrl("img")
+                .imgUrl(imgUrl)
                 .birth(request.dogBirth())
                 .name(request.dogName())
                 .type(request.dogType())

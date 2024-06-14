@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public class RedisException extends CustomException{
     public RedisException(final ErrorCode errorCode) {
-        super(errorCode, null);
+        super(errorCode, (String) null);
     }
 }
