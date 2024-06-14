@@ -21,8 +21,26 @@ spring:
     user: dogWalker
     password: dogWalker
     baseline-on-migrate: true
+  data:
+    redis:
+      host: localhost
+      port: 6378
 logging:
   level:
     org:
       hibernate:
         SQL: debug
+google:
+  auth:
+    url: url
+  client:
+    id: id
+    pw: pw
+  login:
+    url: login
+  redirect:
+    url: redirect
+security:
+  jwt:
+    expire: 1000
+    secret: dfjksldfjdsl
