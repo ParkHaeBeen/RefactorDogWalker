@@ -4,11 +4,13 @@ import com.project.core.common.oauth.dto.GoogleRequest;
 import com.project.core.common.oauth.dto.GoogleResponse;
 import com.project.core.common.oauth.dto.GoogleTokenResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GoogleOauth {
 
     @Value("${google.client.id}")
@@ -26,7 +28,8 @@ public class GoogleOauth {
         final String requestUrl = GOOGLE_API_URL+"client_id="
                 + GOOGLE_CLIENT_ID
                 + "&redirect_uri="+GOOGLE_REDIRECT_URL
-                +"&response_type=code&scope=email%20profile%20openid&access_type=offline";
+                +"&response_type=code" +
+                "&scope=profile";
 
         return requestUrl;
     }
@@ -40,7 +43,9 @@ public class GoogleOauth {
                 .grantType("authorization_code")
                 .build());
 
-        return googleClient.getGoogleDetailInfo(googleTokenResponse.getIdToken());
+        final GoogleResponse response = googleClient.getGoogleDetailInfo(googleTokenResponse.getIdToken());
+        response.setIdToken(googleTokenResponse.getIdToken());
+        return response;
     }
 
     public GoogleResponse getUserInfo(final String accessToken){

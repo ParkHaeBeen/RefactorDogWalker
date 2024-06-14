@@ -10,6 +10,7 @@ import com.project.customer.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,10 +37,10 @@ public class UserController {
                 .body(userService.login(code));
     }
 
-    @PostMapping( "/join")
+    @PostMapping( value = "/join", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<UserJoinResponse> join(
             @RequestPart @Valid final UserJoinRequest request,
-            @RequestPart final MultipartFile dogImg) {
+            @RequestPart(required = false) final MultipartFile dogImg) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.join(request , dogImg));

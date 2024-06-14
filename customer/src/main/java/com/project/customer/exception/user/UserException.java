@@ -8,7 +8,10 @@ import lombok.Getter;
 public class UserException extends CustomException {
 
     public UserException(final ErrorCode errorCode) {
-        super(errorCode);
+        super(errorCode, null);
     }
 
+    public UserException(final ErrorCode errorCode, final String message) {
+        super(errorCode, message);
+    }
 }

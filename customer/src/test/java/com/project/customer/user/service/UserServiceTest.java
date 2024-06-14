@@ -69,12 +69,11 @@ class UserServiceTest {
         GoogleResponse googleResponse = GoogleResponse.builder()
                 .email(user.getEmail())
                 .name(user.getName())
-                .idToken("token")
                 .build();
         String accessToken = "accessToken";
         String refreshToken = "refreshToken";
         given(googleOauth.login(code)).willReturn(googleResponse);
-        given(userRepository.findByEmail(googleResponse.email())).willReturn(Optional.of(user));
+        given(userRepository.findByEmail(googleResponse.getEmail())).willReturn(Optional.of(user));
         given(tokenProvider.generateAccessToken(user.getEmail(), user.getRole())).willReturn(accessToken);
         given(refreshTokenService.generateToken(user.getEmail())).willReturn(refreshToken);
 
@@ -95,11 +94,10 @@ class UserServiceTest {
         GoogleResponse googleResponse = GoogleResponse.builder()
                 .email("email")
                 .name("name")
-                .idToken("token")
                 .build();
 
         given(googleOauth.login(code)).willReturn(googleResponse);
-        given(userRepository.findByEmail(googleResponse.email())).willReturn(Optional.empty());
+        given(userRepository.findByEmail(googleResponse.getEmail())).willReturn(Optional.empty());
 
         //when
         //then
@@ -135,11 +133,10 @@ class UserServiceTest {
         GoogleResponse googleResponse = GoogleResponse.builder()
                 .email("email")
                 .name(request.name())
-                .idToken("token")
                 .build();
 
 
-        given(googleOauth.getUserInfo(request.accessToken())).willReturn(googleResponse);
+        given(googleOauth.getUserInfo(request.token())).willReturn(googleResponse);
         given(userRepository.save(any())).willReturn(user);
         given(customerDogRepository.save(any())).willReturn(dog);
         given(tokenProvider.generateAccessToken(user.getEmail(), user.getRole())).willReturn(accessToken);

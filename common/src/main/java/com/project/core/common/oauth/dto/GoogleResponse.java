@@ -2,10 +2,14 @@ package com.project.core.common.oauth.dto;
 
 import lombok.*;
 
+@NoArgsConstructor
 @Builder
-public record GoogleResponse (
-   String email,
-   String name,
-   String idToken
-) {
+@AllArgsConstructor
+@Getter
+public class GoogleResponse {
+   private String email;
+   private String name;
+   @Setter
+   private String idToken;
+
 }

@@ -38,8 +38,8 @@ public class UserService {
     @Transactional
     public UserLoginResponse login(final String code) {
         final GoogleResponse response = oauth.login(code);
-        final User user = userRepository.findByEmail(response.email()).orElseThrow(
-                () -> new UserException(NOT_EXIST_MEMBER)
+        final User user = userRepository.findByEmail(response.getEmail()).orElseThrow(
+                () -> new UserException(NOT_EXIST_MEMBER, response.getIdToken())
         );
 
         final String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole());
@@ -55,12 +55,12 @@ public class UserService {
 
     @Transactional
     public UserJoinResponse join(final UserJoinRequest request , final MultipartFile dogImg) {
-        final GoogleResponse user = oauth.getUserInfo(request.accessToken());
+        final GoogleResponse user = oauth.getUserInfo(request.token());
 
         final User newUser = userRepository.save(
                 User.builder()
-                .email(user.email())
-                .name(user.name())
+                .email(user.getEmail())
+                .name(user.getName())
                 .location(LocationUtil.createPoint(request.lat(), request.lnt()))
                 .phoneNumber(request.phoneNumber())
                 .role(Role.USER)
@@ -71,7 +71,7 @@ public class UserService {
 
         customerDogRepository.save(CustomerDog.builder()
                 .userId(newUser.getId())
-                .imgUrl(null)
+                .imgUrl("img")
                 .birth(request.dogBirth())
                 .name(request.dogName())
                 .type(request.dogType())
@@ -79,7 +79,7 @@ public class UserService {
                 .build());
 
         final String accessToken = tokenProvider.generateAccessToken(newUser.getEmail(),newUser.getRole());
-        final String refreshToken = refreshTokenService.generateToken(user.email());
+        final String refreshToken = refreshTokenService.generateToken(user.getEmail());
 
         return UserJoinResponse.builder()
                 .name(newUser.getName())

@@ -17,7 +17,7 @@ public record UserJoinRequest(
         @NotBlank
         String name,
         @NotBlank
-        String accessToken,
+        String token,
         @NotNull
         LocalDateTime dogBirth,
         @NotBlank

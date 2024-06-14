@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 @RequiredArgsConstructor
+@Slf4j
 public class FeignErrorDecoder implements ErrorDecoder {
 
   private final ObjectMapper objectMapper;
