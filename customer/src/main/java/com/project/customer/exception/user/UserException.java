@@ -8,7 +8,11 @@ import lombok.Getter;
 public class UserException extends CustomException {
 
     public UserException(final ErrorCode errorCode) {
-        super(errorCode, null);
+        super(errorCode, (String) null);
+    }
+
+    public UserException(final Exception exception) {
+        super(ErrorCode.IMG_UPLOAD_FAIL, exception);
     }
 
     public UserException(final ErrorCode errorCode, final String message) {

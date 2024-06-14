@@ -9,6 +9,13 @@ public class CustomException extends RuntimeException{
   private final String errorMessage;
   private final String extraInfo;
 
+  public CustomException(final ErrorCode errorCode,final Exception e) {
+    super(e);
+    this.errorCode = errorCode;
+    this.errorMessage = errorCode.getValue();
+    this.extraInfo = null;
+  }
+
   public CustomException(final ErrorCode errorCode, final Exception e, final String extraInfo) {
     super(e);
     this.errorCode = errorCode;
@@ -26,7 +33,7 @@ public class CustomException extends RuntimeException{
   public CustomException(final ErrorCode errorCode, final String extraInfo){
     this.errorCode= errorCode;
     this.errorMessage= errorCode.getValue();
-      this.extraInfo = extraInfo;
+    this.extraInfo = extraInfo;
   }
 
 }
