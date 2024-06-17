@@ -92,7 +92,7 @@ public class UserService {
 
     @Transactional
     public UserTokenResponse generateAccessToken(final String refreshToken) {
-        final String email = refreshTokenService.getTokenInfo(refreshToken);
+        final String email = refreshTokenService.getTokenInfo(refreshToken, "email");
 
         if(refreshTokenService.validateToken(email)) {
           throw new UserException(TOKEN_EXPIRED);

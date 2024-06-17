@@ -3,6 +3,7 @@ package com.project.customer.user.service;
 import com.project.core.common.token.TokenProvider;
 import com.project.customer.common.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,7 @@ public class RefreshTokenService {
     private final RedisService redisService;
     private final TokenProvider tokenProvider;
 
+    @Value("${security.jwt.refresh-expire}")
     private long REFRESH_TOKEN_EXPIRE_TIME;
 
     private static final String REDIS_REFRESH = "REDIS_REFRESH";
@@ -21,10 +23,8 @@ public class RefreshTokenService {
         return token;
     }
 
-    public String getTokenInfo(final String token) {
-        return tokenProvider.parseClaims(token)
-                .getBody()
-                .get("email", String.class);
+    public String getTokenInfo(final String token, final String subject) {
+        return tokenProvider.getSubject(token, subject);
     }
 
     public boolean validateToken(final String email) {
@@ -34,6 +34,6 @@ public class RefreshTokenService {
             return false;
         }
 
-        return getTokenInfo(token).equals(email);
+        return getTokenInfo(token, "email").equals(email);
     }
 }

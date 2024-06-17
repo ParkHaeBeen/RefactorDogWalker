@@ -20,10 +20,9 @@ public class TokenProvider {
     @Value("${security.jwt.secret}")
     private String SECRET_KEY;
 
-    public static final String TOKEN_PREFIX="Bearer ";
-
-    private static final String ACCESS_SUBJECT="AccessToken";
-    private static final String REFRESH_SUBJECT="RefreshToken";
+    public static final String TOKEN_PREFIX = "Bearer ";
+    private static final String ACCESS_SUBJECT = "AccessToken";
+    private static final String REFRESH_SUBJECT = "RefreshToken";
 
     public String generateAccessToken(final String email, final Role role){
         final Date now = new Date();
@@ -56,7 +55,7 @@ public class TokenProvider {
         if (!StringUtils.hasText(token)) {
             return false;
         }
-        final Jws<Claims> claims = parseClaims(token);
+        final Claims claims = parseClaims(token);
         return isToken(claims, ACCESS_SUBJECT) && isNotExpired(claims);
     }
 
@@ -64,28 +63,34 @@ public class TokenProvider {
         if (!StringUtils.hasText(token)) {
             return false;
         }
-        final Jws<Claims> claims = parseClaims(token);
+        final Claims claims = parseClaims(token);
         return isToken(claims, REFRESH_SUBJECT) && isNotExpired(claims);
     }
 
-    public Jws<Claims> parseClaims(final String authorizationToken) {
+    public String getSubject(final String authorizationToken, final String subject) {
+        return parseClaims(authorizationToken).get(subject, String.class);
+    }
+
+    private Claims parseClaims(final String authorizationToken) {
         final String token = authorizationToken.substring(TOKEN_PREFIX.length());
-        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
+        return Jwts.parserBuilder().setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
-    private boolean isToken(final Jws<Claims> claims, final String subject) {
-        return claims.getBody().getSubject().equals(subject);
+    private boolean isToken(final Claims claims, final String subject) {
+        return claims.getSubject().equals(subject);
     }
 
-    private boolean isNotExpired(final Jws<Claims> claims) {
-        return claims.getBody().getExpiration().after(new Date());
+    private boolean isNotExpired(final Claims claims) {
+        return claims.getExpiration().after(new Date());
     }
 
     public AuthMember getAuthMember(final String authorizationHeader) {
-        final Jws<Claims> claims = parseClaims(authorizationHeader);
-        final Claims body = claims.getBody();
-        final String email = body.get("email" , String.class);
-        final Role role= Role.valueOf((String) body.get("role"));
+        final Claims claims = parseClaims(authorizationHeader);
+        final String email = claims.get("email" , String.class);
+        final Role role= Role.valueOf((String) claims.get("role"));
         return new AuthMember(email, role);
     }
 }
