@@ -166,7 +166,7 @@ class UserServiceTest {
         String newAccessToken = "newAccessToken";
         String newRefreshToken = "newRefreshToken";
 
-        given(refreshTokenService.getTokenInfo(refreshToken)).willReturn(email);
+        given(refreshTokenService.getTokenInfo(refreshToken, "email")).willReturn(email);
         given(refreshTokenService.validateToken(email)).willReturn(false);
         given(userRepository.findByEmail(email)).willReturn(Optional.of(user));
         given(tokenProvider.generateAccessToken(user.getEmail(), user.getRole())).willReturn(newAccessToken);
@@ -186,7 +186,7 @@ class UserServiceTest {
         String refreshToken = "refreshToken";
         String email = "email";
 
-        given(refreshTokenService.getTokenInfo(refreshToken)).willReturn(email);
+        given(refreshTokenService.getTokenInfo(refreshToken, "email")).willReturn(email);
         given(refreshTokenService.validateToken(email)).willReturn(true);
 
         //when
@@ -201,7 +201,7 @@ class UserServiceTest {
         String refreshToken = "refreshToken";
         String email = "email";
 
-        given(refreshTokenService.getTokenInfo(refreshToken)).willReturn(email);
+        given(refreshTokenService.getTokenInfo(refreshToken, "email")).willReturn(email);
         given(refreshTokenService.validateToken(email)).willReturn(false);
         given(userRepository.findByEmail(email)).willReturn(Optional.empty());
 
