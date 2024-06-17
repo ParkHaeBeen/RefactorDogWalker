@@ -1,4 +1,4 @@
-package com.project.customer.common.service;
+package com.project.core.common.service;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;

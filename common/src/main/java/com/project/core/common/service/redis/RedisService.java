@@ -1,9 +1,7 @@
-package com.project.customer.common.service.redis;
+package com.project.core.common.service.redis;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.customer.exception.ErrorCode;
-import com.project.customer.exception.RedisException;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.data.redis.core.RedisOperations;
@@ -45,7 +43,7 @@ public class RedisService {
     final List <Object> list = routes.opsForList().range(key , 0 , -1);
 
     if(list.isEmpty()) {
-      throw new RedisException(ErrorCode.REDIS_ERROR);
+      throw new RuntimeException("redis list is empty");
     }
 
     return list.stream()

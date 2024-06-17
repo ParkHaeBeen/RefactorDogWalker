@@ -2,7 +2,7 @@ package com.project.customer.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.project.customer.common.service.redis.CoordinateDeserializer;
+import com.project.core.common.service.redis.CoordinateDeserializer;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.redisson.Redisson;

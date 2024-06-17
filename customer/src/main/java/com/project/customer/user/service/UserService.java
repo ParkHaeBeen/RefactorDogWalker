@@ -2,11 +2,12 @@ package com.project.customer.user.service;
 
 import com.project.core.common.oauth.GoogleOauth;
 import com.project.core.common.oauth.dto.GoogleResponse;
+import com.project.core.common.service.LocationUtil;
+import com.project.core.common.token.RefreshTokenService;
 import com.project.core.common.token.TokenProvider;
 import com.project.core.domain.user.Role;
 import com.project.core.domain.user.User;
 import com.project.core.domain.user.customer.CustomerDog;
-import com.project.customer.common.service.LocationUtil;
 import com.project.customer.exception.user.UserException;
 import com.project.customer.user.dto.response.UserJoinRequest;
 import com.project.customer.user.dto.response.UserJoinResponse;

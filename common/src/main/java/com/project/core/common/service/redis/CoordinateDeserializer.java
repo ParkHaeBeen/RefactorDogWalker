@@ -1,4 +1,4 @@
-package com.project.customer.common.service.redis;
+package com.project.core.common.service.redis;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

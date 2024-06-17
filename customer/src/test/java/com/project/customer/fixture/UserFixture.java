@@ -1,8 +1,8 @@
 package com.project.customer.fixture;
 
+import com.project.core.common.service.LocationUtil;
 import com.project.core.domain.user.Role;
 import com.project.core.domain.user.User;
-import com.project.customer.common.service.LocationUtil;
 
 import static com.project.core.domain.user.Role.USER;
 import static com.project.core.domain.user.Role.WALKER;
