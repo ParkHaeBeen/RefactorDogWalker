@@ -54,15 +54,12 @@ dependencies {
     implementation 'org.hibernate:hibernate-spatial:6.2.2.Final'
     implementation 'org.locationtech.jts:jts-core:1.18.2'
 
-    //batch
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
-    implementation 'net.bytebuddy:byte-buddy:1.14.16'
-
     //querydsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    implementation 'net.bytebuddy:byte-buddy:1.14.16'
     testImplementation 'org.mockito:mockito-core:5.10.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

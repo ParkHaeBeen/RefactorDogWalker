@@ -1,0 +1,14 @@
+google:
+  auth:
+    url: google
+  client:
+    id: id
+    pw: pw
+  login:
+    url: url
+  redirect:
+    url: url
+security:
+  jwt:
+    access-expire: 3600
+    refresh-expire: 432000
