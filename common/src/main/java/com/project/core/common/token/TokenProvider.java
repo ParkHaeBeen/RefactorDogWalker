@@ -2,7 +2,6 @@ package com.project.core.common.token;
 
 import com.project.core.domain.user.Role;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,10 +86,10 @@ public class TokenProvider {
         return claims.getExpiration().after(new Date());
     }
 
-    public AuthMember getAuthMember(final String authorizationHeader) {
+    public AuthUser getAuthMember(final String authorizationHeader) {
         final Claims claims = parseClaims(authorizationHeader);
         final String email = claims.get("email" , String.class);
         final Role role= Role.valueOf((String) claims.get("role"));
-        return new AuthMember(email, role);
+        return new AuthUser(email, role);
     }
 }

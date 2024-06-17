@@ -4,7 +4,7 @@ import com.project.core.domain.user.Role;
 import lombok.Builder;
 
 @Builder
-public record AuthMember(
+public record AuthUser(
         String email,
         Role role
 ) {

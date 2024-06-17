@@ -1,4 +1,4 @@
-package com.project.customer.user.dto.response;
+package com.project.customer.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

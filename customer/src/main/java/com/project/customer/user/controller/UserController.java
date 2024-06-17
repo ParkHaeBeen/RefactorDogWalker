@@ -2,7 +2,7 @@ package com.project.customer.user.controller;
 
 import com.project.customer.exception.ErrorCode;
 import com.project.customer.exception.user.UserException;
-import com.project.customer.user.dto.response.UserJoinRequest;
+import com.project.customer.user.dto.request.UserJoinRequest;
 import com.project.customer.user.dto.response.UserJoinResponse;
 import com.project.customer.user.dto.response.UserLoginResponse;
 import com.project.customer.user.dto.response.UserTokenResponse;
