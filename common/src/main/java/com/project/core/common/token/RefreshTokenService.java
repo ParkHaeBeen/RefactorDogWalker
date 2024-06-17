@@ -1,7 +1,6 @@
-package com.project.customer.user.service;
+package com.project.core.common.token;
 
-import com.project.core.common.token.TokenProvider;
-import com.project.customer.common.service.redis.RedisService;
+import com.project.core.common.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
