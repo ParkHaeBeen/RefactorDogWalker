@@ -74,7 +74,6 @@ public class UserService {
                 .build()
         );
 
-        // TODO : 워커 가격 및 안되는 일정
         saveDetail(request, newUser.getId());
 
         final String accessToken = tokenProvider.generateAccessToken(newUser.getEmail(),newUser.getRole());
