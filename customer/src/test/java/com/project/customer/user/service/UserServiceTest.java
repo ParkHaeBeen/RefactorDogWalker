@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -121,7 +122,7 @@ class UserServiceTest {
                 user.getLocation().getY(),
                 user.getName(),
                 "accessToken",
-                LocalDateTime.now(),
+                LocalDate.now(),
                 "dogName",
                 "dogType",
                 "dogDescription"
@@ -142,7 +143,7 @@ class UserServiceTest {
 
         given(googleOauth.getUserInfo(request.token())).willReturn(googleResponse);
         given(userRepository.save(any())).willReturn(user);
-        given(imgService.save(any())).willReturn("img");
+        //given(imgService.save(any())).willReturn("img");
         given(customerDogRepository.save(any())).willReturn(dog);
         given(tokenProvider.generateAccessToken(user.getEmail(), user.getRole())).willReturn(accessToken);
         given(refreshTokenService.generateToken(anyString())).willReturn(refreshToken);

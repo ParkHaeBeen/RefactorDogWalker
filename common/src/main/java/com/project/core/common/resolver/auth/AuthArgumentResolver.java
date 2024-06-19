@@ -29,9 +29,8 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
           final ModelAndViewContainer mavContainer ,
           final NativeWebRequest webRequest,
           final WebDataBinderFactory binderFactory
-  ) throws Exception {
+  ) {
     final String authorizationHeader = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
-
     if(authorizationHeader==null||!authorizationHeader.startsWith(TOKEN_PREFIX)){
       return null;
     }

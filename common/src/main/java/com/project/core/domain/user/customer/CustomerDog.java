@@ -2,7 +2,8 @@ package com.project.core.domain.user.customer;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ public class CustomerDog {
   private String imgUrl;
 
   @Column(name = "birth_at", nullable = false)
-  private LocalDateTime birth;
+  private LocalDate birth;
 
   @Column(name = "name", nullable = false)
   private String name;
