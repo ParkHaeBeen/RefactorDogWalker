@@ -4,13 +4,12 @@ import com.project.core.domain.user.Role;
 import com.project.core.domain.user.User;
 import com.project.customer.walkerSearch.repository.UserCustomRepository;
 import org.locationtech.jts.geom.Point;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>, UserCustomRepository {
@@ -20,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long>, UserCustomRep
 
     @Query("SELECT user from User user " +
             "where st_contains(st_buffer(:center, :radius), user.location)")
-    List<User> findAllWithCircleArea(
+    Page<User> findAllWithCircleArea(
             @Param("center") final Point center,
             @Param("radius") final int radius,
             Pageable pageable
@@ -28,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long>, UserCustomRep
 
     @Query("SELECT user from User user " +
             "where st_contains(st_buffer(:center, :radius), user.location) and user.name = :name")
-    List<User> findAllWithCircleAreaAndName(
+    Page<User> findAllWithCircleAreaAndName(
             @Param("center") final Point center,
             @Param("radius") final int radius,
             @Param("name") final String name,

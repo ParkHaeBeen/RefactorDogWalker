@@ -15,11 +15,9 @@ import com.project.customer.walkerSearch.repository.WalkerScheduleTempRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
 import static com.project.customer.exception.ErrorCode.NOT_EXIST_MEMBER;
 
 @Service
