@@ -1,9 +1,10 @@
-package com.project.customer.user.dto.response;
+package com.project.customer.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record UserJoinRequest(
@@ -19,7 +20,7 @@ public record UserJoinRequest(
         @NotBlank
         String token,
         @NotNull
-        LocalDateTime dogBirth,
+        LocalDate dogBirth,
         @NotBlank
         String dogName,
         @NotBlank

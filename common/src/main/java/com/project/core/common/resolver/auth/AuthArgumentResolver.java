@@ -19,7 +19,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
   public boolean supportsParameter(final MethodParameter parameter) {
-    return parameter.hasParameterAnnotation(AuthMember.class);
+    return parameter.hasParameterAnnotation(Authentication.class);
 
   }
 
@@ -29,9 +29,8 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
           final ModelAndViewContainer mavContainer ,
           final NativeWebRequest webRequest,
           final WebDataBinderFactory binderFactory
-  ) throws Exception {
+  ) {
     final String authorizationHeader = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
-
     if(authorizationHeader==null||!authorizationHeader.startsWith(TOKEN_PREFIX)){
       return null;
     }

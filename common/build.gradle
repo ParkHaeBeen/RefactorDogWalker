@@ -7,6 +7,8 @@ repositories {
     mavenCentral()
 }
 
+bootJar.enabled = false
+
 dependencies {
     implementation 'org.hibernate:hibernate-spatial:6.2.2.Final'
     implementation 'org.locationtech.jts:jts-core:1.18.2'
@@ -32,4 +34,26 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+}
+
+
+def querydslSrcDir = 'src/main/generated'
+sourceSets {
+    main {
+        java {
+            srcDirs += [ querydslSrcDir ]
+        }
+    }
+}
+
+compileJava {
+    options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
+}
+
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
+
+clean {
+    delete file(querydslSrcDir)
 }

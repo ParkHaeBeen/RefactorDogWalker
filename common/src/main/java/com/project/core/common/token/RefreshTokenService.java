@@ -28,7 +28,6 @@ public class RefreshTokenService {
 
     public boolean validateToken(final String email) {
         final String token = String.valueOf(redisService.getData(REDIS_REFRESH + email));
-
         if(token.isBlank() || !tokenProvider.validateRefreshToken(token)) {
             return false;
         }

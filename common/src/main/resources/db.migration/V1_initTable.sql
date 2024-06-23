@@ -3,11 +3,11 @@ CREATE TABLE `users` (
                          `id`	BIGINT AUTO_INCREMENT PRIMARY KEY,
                          `email`	varchar(100) UNIQUE NOT NULL,
                          `phone_number`	varchar(20)	NOT NULL,
-                         `location` GEOMETRY NOT NULL ,
+                         `location` POINT NOT NULL SRID 4326,
                          `role`	varchar(10)	NOT NULL,
                          `name`	varchar(100)	NOT NULL,
-                         `created_at`	DATE	NOT NULL,
-                         `updated_at`	DATE	NOT NULL
+                         `created_at`	TIMESTAMP	NOT NULL,
+                         `updated_at`	TIMESTAMP	NOT NULL
 );
 
 CREATE TABLE `customer_dog` (
@@ -54,11 +54,11 @@ CREATE TABLE `walker_reserve` (
                                           `id`	bigint AUTO_INCREMENT PRIMARY KEY,
                                           `walker_id`	bigint	NOT NULL,
                                           `customer_id`	bigint	NOT NULL,
-                                          `created_at`	DATE NOT NULL,
-                                          `date`	DATE NOT NULL,
+                                          `created_at`	TIMESTAMP NOT NULL,
+                                          `date`	TIMESTAMP NOT NULL,
                                           `time_unit` int NOT NULL,
                                           `status`	varchar(255)	NOT NULL,
-                                          `updated_at`	DATE NOT NULL,
+                                          `updated_at`	TIMESTAMP NOT NULL,
                                           `price` int NOT NULL,
                                           UNIQUE KEY unique_walker_datetime (walker_id, date),
                                           FOREIGN KEY (`walker_id`) REFERENCES `users` (`id`),
@@ -81,8 +81,8 @@ CREATE TABLE `pay_history` (
                                `walker_reserve_id`	bigint	NOT NULL,
                                `price`	int NOT NULL,
                                `status`	varchar(255) NOT NULL,
-                               `created_at`	DATE NOT NULL,
-                               `updated_at`	DATE NOT NULL,
+                               `created_at`	TIMESTAMP NOT NULL,
+                               `updated_at`	TIMESTAMP NOT NULL,
                                `method`	varchar(50) NOT NULL,
                                FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
                                FOREIGN KEY (`walker_reserve_id`) REFERENCES `walker_reserve` (`id`)
@@ -96,8 +96,8 @@ CREATE TABLE `walker_adjust` (
                                  `status`	varchar(255)  NOT NULL,
                                  `period_start` DATE NOT NULL,
                                  `period_end` DATE NOT NULL,
-                                 `created_at`	DATE	NOT NULL,
-                                 `updated_at`	DATE	NOT NULL,
+                                 `created_at`	TIMESTAMP	NOT NULL,
+                                 `updated_at`	TIMESTAMP	NOT NULL,
                                  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 
 );

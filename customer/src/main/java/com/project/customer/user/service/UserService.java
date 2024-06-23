@@ -9,7 +9,7 @@ import com.project.core.domain.user.Role;
 import com.project.core.domain.user.User;
 import com.project.core.domain.user.customer.CustomerDog;
 import com.project.customer.exception.user.UserException;
-import com.project.customer.user.dto.response.UserJoinRequest;
+import com.project.customer.user.dto.request.UserJoinRequest;
 import com.project.customer.user.dto.response.UserJoinResponse;
 import com.project.customer.user.dto.response.UserLoginResponse;
 import com.project.customer.user.dto.response.UserTokenResponse;
@@ -69,11 +69,11 @@ public class UserService {
                 .build()
         );
 
-        final String imgUrl = imgService.save(dogImg);
+        //final String imgUrl = imgService.save(dogImg);
 
         customerDogRepository.save(CustomerDog.builder()
                 .userId(newUser.getId())
-                .imgUrl(imgUrl)
+                .imgUrl("img")
                 .birth(request.dogBirth())
                 .name(request.dogName())
                 .type(request.dogType())
@@ -94,7 +94,6 @@ public class UserService {
     @Transactional
     public UserTokenResponse generateAccessToken(final String refreshToken) {
         final String email = refreshTokenService.getTokenInfo(refreshToken, "email");
-
         if(refreshTokenService.validateToken(email)) {
           throw new UserException(TOKEN_EXPIRED);
         }
