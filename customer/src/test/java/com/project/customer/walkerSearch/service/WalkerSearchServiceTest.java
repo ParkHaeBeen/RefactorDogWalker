@@ -4,14 +4,16 @@ import com.project.core.common.token.AuthUser;
 import com.project.core.domain.reserve.WalkerReserve;
 import com.project.core.domain.reserve.WalkerServiceStatus;
 import com.project.core.domain.user.User;
+import com.project.core.domain.user.walker.WalkerPrice;
+import com.project.core.domain.user.walker.WalkerSchedulePerm;
+import com.project.core.domain.user.walker.WalkerScheduleTemp;
 import com.project.customer.fixture.AuthUserFixture;
 import com.project.customer.fixture.UserFixture;
 import com.project.customer.fixture.WalkerReserveFixture;
 import com.project.customer.user.repository.UserRepository;
 import com.project.customer.walkerSearch.dto.request.WalkerReserveRequest;
 import com.project.customer.walkerSearch.dto.request.WalkerSearchRequest;
-import com.project.customer.walkerSearch.dto.response.WalkerReserveResponse;
-import com.project.customer.walkerSearch.dto.response.WalkerSearchResponse;
+import com.project.customer.walkerSearch.dto.response.*;
 import com.project.customer.walkerSearch.repository.WalkerPriceRepository;
 import com.project.customer.walkerSearch.repository.WalkerReserveRepository;
 import com.project.customer.walkerSearch.repository.WalkerSchedulePermRepository;
@@ -24,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
@@ -107,13 +108,24 @@ class WalkerSearchServiceTest {
         AuthUser authUser = AuthUserFixture.AUTH_USER_ONE.생성();
         User user = UserFixture.USER_ONE.생성(authUser);
         User walker = UserFixture.WALKER_ONE.생성();
+        WalkerPrice price = new WalkerPrice(1L, walker.getId(), 30, 10000);
+        WalkerSchedulePerm schedulePerm = new WalkerSchedulePerm(1L, walker.getId(), "MON", 30, 40);
+        WalkerScheduleTemp scheduleTemp = new WalkerScheduleTemp(1L, walker.getId(), LocalDate.now());
 
         given(userRepository.findByEmailAndRole(authUser.email(), authUser.role())).willReturn(Optional.of(user));
         given(userRepository.findById(walker.getId())).willReturn(Optional.of(walker));
+        given(walkerPriceRepository.findByWalkerId(walker.getId())).willReturn(List.of(price));
+        given(walkerSchedulePermRepository.findByWalkerId(walker.getId())).willReturn(List.of(schedulePerm));
+        given(walkerScheduleTempRepository.findByWalkerIdAndUnAvailAtGreaterThan(walker.getId(), LocalDate.now())).willReturn(List.of(scheduleTemp));
 
         //when
+        WalkerSearchDetailResponse response = walkerSearchService.read(authUser, walker.getId());
 
         //then
+        Assertions.assertThat(response.name()).isEqualTo(walker.getName());
+        Assertions.assertThat(response.prices().size()).isEqualTo(1);
+        Assertions.assertThat(response.permUnAvailDates().size()).isEqualTo(1);
+        Assertions.assertThat(response.tempUnAvailDates().size()).isEqualTo(1);
     }
 
     @Test
