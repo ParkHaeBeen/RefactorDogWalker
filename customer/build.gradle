@@ -53,6 +53,9 @@ dependencies {
     implementation 'org.hibernate:hibernate-spatial:6.2.2.Final'
     implementation 'org.locationtech.jts:jts-core:1.18.2'
 
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka:3.2.1'
+
     implementation 'net.bytebuddy:byte-buddy:1.14.16'
     testImplementation 'org.mockito:mockito-core:5.10.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
