@@ -12,16 +12,22 @@ import com.project.customer.kafka.KafkaSender;
 import com.project.customer.kafka.Topic;
 import com.project.customer.kafka.dto.ReserveDto;
 import com.project.customer.reserve.dto.request.ReserveRequest;
+import com.project.customer.reserve.dto.response.ReserveDetailResponse;
+import com.project.customer.reserve.dto.response.ReserveListResponse;
 import com.project.customer.reserve.dto.response.ReserveResponse;
 import com.project.customer.reserve.repository.PayHistoryRepository;
 import com.project.customer.user.repository.UserRepository;
 import com.project.customer.walkerSearch.repository.WalkerReserveRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.project.customer.exception.ErrorCode.NOT_EXIST_MEMBER;
+import static com.project.customer.exception.ErrorCode.NOT_EXIST_RESERVE;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +69,6 @@ public class ReserveService {
                         .build()
         );
 
-        //TODO:kafka
         sendReserve(reserve, walker);
 
         return ReserveResponse.toResponse(reserve, payHistory);
@@ -81,17 +86,33 @@ public class ReserveService {
         }
     }
 
-    public void test() {
-        try {
-            sender.sendReserve(Topic.RESERVE, ReserveDto.builder()
-                    .reserveId(2L)
-                    .walkerId(1L)
-                    .build()
-            );
-        } catch (JsonProcessingException e) {
-            System.out.println("e = " + e);
-            log.error("e {} ",e);
-            throw new RuntimeException(e);
-        }
+    @Transactional
+    public void cancel(final AuthUser user, final Long id) {
+        final User customer = userRepository.findByEmailAndRole(user.email() , user.role())
+                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
+
+        final WalkerReserve reserve = walkerReserveRepository.findByCustomerAndId(customer, id)
+                .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
+
+        reserve.cancel();
+    }
+
+    public List<ReserveListResponse> readAll(final AuthUser user, final Pageable pageable) {
+        final User customer = userRepository.findByEmailAndRole(user.email() , user.role())
+                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
+        return walkerReserveRepository.findByCustomer(customer, pageable).getContent()
+                .stream()
+                .map(ReserveListResponse::toResponse)
+                .toList();
+    }
+
+    public ReserveDetailResponse read(final AuthUser user, final Long id) {
+        userRepository.findByEmailAndRole(user.email() , user.role())
+                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
+
+        final WalkerReserve reserve = walkerReserveRepository.findById(id)
+                .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
+
+        return ReserveDetailResponse.toResponse(reserve);
     }
 }

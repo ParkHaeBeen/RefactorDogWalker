@@ -52,9 +52,9 @@ public enum UserFixture {
         return User.builder()
                 .id(this.userId)
                 .phoneNumber(this.userPhoneName)
-                .role(this.role)
+                .role(authUser.role())
                 .name(this.userName)
-                .email(this.userEmail)
+                .email(authUser.email())
                 .location(LocationUtil.createPoint(this.userLat, this.userLnt))
                 .build();
     }
