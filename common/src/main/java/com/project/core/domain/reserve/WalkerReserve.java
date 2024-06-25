@@ -47,7 +47,7 @@ public class WalkerReserve extends BaseEntity {
   @Column(name = "price", nullable = false)
   private Integer price;
 
-  public void cancel() {
-    this.status = WalkerServiceStatus.CUSTOMER_CANCEL;
+  public void changeStatus(final WalkerServiceStatus status) {
+    this.status = status;
   }
 }

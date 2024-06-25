@@ -16,6 +16,7 @@ public enum ErrorCode {
 
   NOT_WRITE_SERVICE_PRICE("서비수 수행자는 회원가입시 서비스 수행에 대한 가격을 기입해야합니다"),
   NOT_EXIST_MEMBER("멤버가 존재하지 않습니다. 회원가입해주세요"),
+  NOT_EXIST_DOG("강아지 정보가 존재하지 않습니다."),
   NOT_WALKER("해당 경로는 서비스 수행자만 가능합니다"),
 
 

@@ -28,7 +28,7 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("Customer API")
+                .title("DogWalker API")
                 .version("2.0");
     }
 }

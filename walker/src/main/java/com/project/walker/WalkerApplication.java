@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EntityScan(basePackages = {"com.project.core"})
 @EnableJpaAuditing
-@ComponentScan(basePackages = {"com.project", "com.project.core.common"})
+@ComponentScan(basePackages = {"com.project"})
 public class WalkerApplication {
     public static void main(String[] args) {
         SpringApplication.run(WalkerApplication.class, args);
