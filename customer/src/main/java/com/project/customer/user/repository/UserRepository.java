@@ -18,7 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long>, UserCustomRep
     Optional<User> findByEmailAndRole(final String email, final Role role);
 
     @Query("SELECT user from User user " +
-            "where st_contains(st_buffer(:center, :radius), user.location)")
+            "where st_contains(st_buffer(:center, :radius), user.location) " +
+            "and user.role = 'WALKER'")
     Page<User> findAllWithCircleArea(
             @Param("center") final Point center,
             @Param("radius") final int radius,
@@ -26,7 +27,8 @@ public interface UserRepository extends JpaRepository<User, Long>, UserCustomRep
     );
 
     @Query("SELECT user from User user " +
-            "where st_contains(st_buffer(:center, :radius), user.location) and user.name = :name")
+            "where st_contains(st_buffer(:center, :radius), user.location) and user.name = :name " +
+            "and user.role = 'WALKER'")
     Page<User> findAllWithCircleAreaAndName(
             @Param("center") final Point center,
             @Param("radius") final int radius,

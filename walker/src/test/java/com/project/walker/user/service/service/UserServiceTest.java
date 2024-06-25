@@ -1,4 +1,4 @@
-package walker.user.service;
+package com.project.walker.user.service.service;
 
 import com.project.core.common.oauth.GoogleOauth;
 import com.project.core.common.oauth.dto.GoogleResponse;
@@ -20,7 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import walker.fixture.UserFixture;
+import com.project.walker.fixture.UserFixture;
 import java.util.List;
 import java.util.Optional;
 

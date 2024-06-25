@@ -17,7 +17,7 @@ public record UserJoinRequest(
         Double lnt,
         @NotBlank
         String name,
-        @NotBlank
+        //TEMP : @NotBlank 없애기
         String token,
         @NotNull
         LocalDate dogBirth,
@@ -26,6 +26,8 @@ public record UserJoinRequest(
         @NotBlank
         String dogType,
         @NotBlank
-        String dogDescription
+        String dogDescription,
+        //TEMP: Oauth없이 회원가입할 수 있게
+        String email
 ) {
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.core.common.token.AuthUser;
 import com.project.core.domain.reserve.PayHistory;
 import com.project.core.domain.reserve.WalkerReserve;
+import com.project.core.domain.reserve.WalkerServiceStatus;
 import com.project.core.domain.user.User;
 import com.project.customer.exception.ErrorCode;
 import com.project.customer.exception.ReserveException;
@@ -94,7 +95,7 @@ public class ReserveService {
         final WalkerReserve reserve = walkerReserveRepository.findByCustomerAndId(customer, id)
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
 
-        reserve.cancel();
+        reserve.changeStatus(WalkerServiceStatus.CUSTOMER_CANCEL);
     }
 
     public List<ReserveListResponse> readAll(final AuthUser user, final Pageable pageable) {

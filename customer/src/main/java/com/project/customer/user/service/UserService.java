@@ -57,16 +57,22 @@ public class UserService {
 
     @Transactional
     public UserJoinResponse join(final UserJoinRequest request , final MultipartFile dogImg) {
-        final GoogleResponse user = oauth.getUserInfo(request.token());
+        // TEMP: Oauth 없이 회원가입 할 수 있게
+        GoogleResponse user;
+        if(request.token().equals(" ")) {
+            user = new GoogleResponse(request.email(), request.name(), "token");
+        } else {
+            user = oauth.getUserInfo(request.token());
+        }
 
         final User newUser = userRepository.save(
                 User.builder()
-                .email(user.getEmail())
-                .name(user.getName())
-                .location(LocationUtil.createPoint(request.lat(), request.lnt()))
-                .phoneNumber(request.phoneNumber())
-                .role(Role.USER)
-                .build()
+                        .email(user.getEmail())
+                        .name(user.getName())
+                        .location(LocationUtil.createPoint(request.lat(), request.lnt()))
+                        .phoneNumber(request.phoneNumber())
+                        .role(Role.USER)
+                        .build()
         );
 
         //final String imgUrl = imgService.save(dogImg);

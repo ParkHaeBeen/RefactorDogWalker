@@ -1,6 +1,7 @@
-package walker.fixture;
+package com.project.walker.fixture;
 
 import com.project.core.common.service.LocationUtil;
+import com.project.core.common.token.AuthUser;
 import com.project.core.domain.user.Role;
 import com.project.core.domain.user.User;
 
@@ -43,6 +44,17 @@ public enum UserFixture {
                 .role(this.role)
                 .name(this.userName)
                 .email(this.userEmail)
+                .location(LocationUtil.createPoint(this.userLat, this.userLnt))
+                .build();
+    }
+
+    public User 생성(final AuthUser authUser) {
+        return User.builder()
+                .id(this.userId)
+                .phoneNumber(this.userPhoneName)
+                .role(authUser.role())
+                .name(this.userName)
+                .email(authUser.email())
                 .location(LocationUtil.createPoint(this.userLat, this.userLnt))
                 .build();
     }
