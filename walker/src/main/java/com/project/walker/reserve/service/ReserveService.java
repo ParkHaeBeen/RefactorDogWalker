@@ -1,6 +1,7 @@
 package com.project.walker.reserve.service;
 
 import com.project.core.common.token.AuthUser;
+import com.project.core.domain.reserve.PayHistory;
 import com.project.core.domain.reserve.WalkerReserve;
 import com.project.core.domain.reserve.WalkerServiceStatus;
 import com.project.core.domain.user.User;
@@ -10,6 +11,7 @@ import com.project.walker.exception.user.UserException;
 import com.project.walker.reserve.dto.response.ReserveDetailResponse;
 import com.project.walker.reserve.dto.response.ReserveListResponse;
 import com.project.walker.reserve.repository.CustomerDogRepository;
+import com.project.walker.reserve.repository.PayHistoryRepository;
 import com.project.walker.reserve.repository.WalkerReserveRepository;
 import com.project.walker.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class ReserveService {
     private final WalkerReserveRepository walkerReserveRepository;
     private final UserRepository userRepository;
     private final CustomerDogRepository customerDogRepository;
+    private final PayHistoryRepository payHistoryRepository;
 
     public List<ReserveListResponse> readAll(final AuthUser user, final WalkerServiceStatus status, final Pageable pageable) {
         final User walker = userRepository.findByEmail(user.email())
@@ -60,6 +63,11 @@ public class ReserveService {
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
         reserve.changeStatus(status);
 
+        if(status == WalkerServiceStatus.WALKER_REFUSE) {
+            final PayHistory payHistory = payHistoryRepository.findByReserve(reserve)
+                    .orElseThrow(() -> new ReserveException(NOT_FOUND_PAY_HISTORY));
+            payHistory.refund();
+        }
         return reserve.getStatus();
     }
 
@@ -67,9 +75,14 @@ public class ReserveService {
     public WalkerServiceStatus cancel(final AuthUser user, final Long reserveId) {
         userRepository.findByEmail(user.email())
                 .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
+
         final WalkerReserve reserve = walkerReserveRepository.findByIdAndStatus(reserveId, WalkerServiceStatus.WALKER_ACCEPT)
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
         reserve.changeStatus(WalkerServiceStatus.WALKER_CANCEL);
+
+        final PayHistory payHistory = payHistoryRepository.findByReserve(reserve)
+                .orElseThrow(() -> new ReserveException(NOT_FOUND_PAY_HISTORY));
+        payHistory.refund();
         return reserve.getStatus();
     }
 }

@@ -27,8 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.project.customer.exception.ErrorCode.NOT_EXIST_MEMBER;
-import static com.project.customer.exception.ErrorCode.NOT_EXIST_RESERVE;
+import static com.project.customer.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -95,6 +94,10 @@ public class ReserveService {
         final WalkerReserve reserve = walkerReserveRepository.findByCustomerAndId(customer, id)
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
 
+        final PayHistory payHistory = payHistoryRepository.findByReserve(reserve)
+                .orElseThrow(() -> new ReserveException(NOT_FOUND_PAY_HISTORY));
+
+        payHistory.refund();
         reserve.changeStatus(WalkerServiceStatus.CUSTOMER_CANCEL);
     }
 
