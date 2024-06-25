@@ -5,10 +5,8 @@ import com.project.core.domain.reserve.WalkerReserve;
 import com.project.core.domain.reserve.WalkerServiceStatus;
 import com.project.core.domain.user.User;
 import com.project.core.domain.user.customer.CustomerDog;
-import com.project.walker.exception.ErrorCode;
-import com.project.walker.exception.ReserveException;
+ import com.project.walker.exception.ReserveException;
 import com.project.walker.exception.user.UserException;
-import com.project.walker.kafka.Topic;
 import com.project.walker.reserve.dto.response.ReserveDetailResponse;
 import com.project.walker.reserve.dto.response.ReserveListResponse;
 import com.project.walker.reserve.repository.CustomerDogRepository;
@@ -55,7 +53,7 @@ public class ReserveService {
     }
 
     @Transactional
-    public WalkerServiceStatus accept(final AuthUser user, final Long reserveId, final WalkerServiceStatus status) {
+    public WalkerServiceStatus changeStatus(final AuthUser user, final Long reserveId, final WalkerServiceStatus status) {
         userRepository.findByEmail(user.email())
                 .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
         final WalkerReserve reserve = walkerReserveRepository.findByIdAndStatus(reserveId, WalkerServiceStatus.WALKER_CHECKING)
@@ -67,6 +65,8 @@ public class ReserveService {
 
     @Transactional
     public WalkerServiceStatus cancel(final AuthUser user, final Long reserveId) {
+        userRepository.findByEmail(user.email())
+                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
         final WalkerReserve reserve = walkerReserveRepository.findByIdAndStatus(reserveId, WalkerServiceStatus.WALKER_ACCEPT)
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
         reserve.changeStatus(WalkerServiceStatus.WALKER_CANCEL);

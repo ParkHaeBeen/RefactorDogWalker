@@ -57,7 +57,7 @@ public class ReserveController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(reserveService.accept(user, reserveId, status));
+                .body(reserveService.changeStatus(user, reserveId, status));
     }
 
     @DeleteMapping("/{reserveId}")
