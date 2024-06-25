@@ -52,11 +52,7 @@ public class WalkerSearchService {
     }
 
     public WalkerSearchDetailResponse read(final AuthUser user, final Long id) {
-        userRepository.findByEmailAndRole(user.email(), user.role())
-                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
-
-        final User walker = userRepository.findById(id)
-                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
+        final User walker = validateUser(user, id);
 
         // TODO: prices, schedulePrems, scheduleTemps를 join
         final List<WalkerPriceResponse> prices = walkerPriceRepository.findByWalkerId(walker.getId())
@@ -84,11 +80,7 @@ public class WalkerSearchService {
     }
 
     public List<WalkerReserveResponse> readReserve(final AuthUser user, final WalkerReserveRequest request) {
-        userRepository.findByEmailAndRole(user.email(), user.role())
-                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
-
-        final User walker = userRepository.findById(request.id())
-                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
+        final User walker = validateUser(user, request.id());
 
         return walkerReserveRepository.findByWalkerAndStatusAndDateBetween(
                         walker
@@ -98,5 +90,13 @@ public class WalkerSearchService {
                 .stream()
                 .map(WalkerReserveResponse::toResponse)
                 .toList();
+    }
+
+    private User validateUser(AuthUser user, Long request) {
+        userRepository.findByEmailAndRole(user.email(), user.role())
+                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
+
+        return userRepository.findById(request)
+                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
     }
 }

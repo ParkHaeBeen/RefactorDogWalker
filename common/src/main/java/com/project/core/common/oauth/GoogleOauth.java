@@ -27,9 +27,9 @@ public class GoogleOauth {
     public String getLoginView(){
         final String requestUrl = GOOGLE_API_URL+"client_id="
                 + GOOGLE_CLIENT_ID
-                + "&redirect_uri=http://"+GOOGLE_REDIRECT_URL
+                + "&redirect_uri="+GOOGLE_REDIRECT_URL
                 +"&response_type=code" +
-                "&scope=profile";
+                "&scope=email%20profile%20openid";
 
         return requestUrl;
     }
