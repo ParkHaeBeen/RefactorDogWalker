@@ -18,10 +18,12 @@ public record UserJoinRequest(
         Double lnt,
         @NotBlank
         String name,
-        @NotBlank
+        //TEMP : @NotBlank 없애기
         String token,
         List<UserJoinScheduleRequest> schedule,
         @NotNull
-        List<UserJoinPriceRequest> price
+        List<UserJoinPriceRequest> price,
+        //TEMP: Oauth없이 회원가입할 수 있게
+        String email
 ) {
 }

@@ -44,10 +44,16 @@ public class UserService {
 
     @Transactional
     public UserLoginResponse login(final String code) {
-        final GoogleResponse response = oauth.login(code);
-        final User user = userRepository.findByEmail(response.getEmail()).orElseThrow(
-                () -> new UserException(NOT_EXIST_MEMBER, response.getIdToken())
-        );
+        GoogleResponse response;
+        //TEMP : Oauth 없이 로그인할 수 있게
+        if(!code.contains("gmail.com")) {
+            response = oauth.login(code);
+        } else {
+            response = new GoogleResponse(code, "name", "token");
+        }
+
+        final User user = userRepository.findByEmail(response.getEmail())
+                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER, response.getIdToken()));
 
         final String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole());
         final String refreshToken = refreshTokenService.generateToken(user.getEmail());
@@ -62,7 +68,13 @@ public class UserService {
 
     @Transactional
     public UserJoinResponse join(final UserJoinRequest request) {
-        final GoogleResponse user = oauth.getUserInfo(request.token());
+        // TEMP: Oauth 없이 회원가입 할 수 있게
+        GoogleResponse user;
+        if(request.token().equals(" ")) {
+            user = new GoogleResponse(request.email(), request.name(), "token");
+        } else {
+            user = oauth.getUserInfo(request.token());
+        }
 
         final User newUser = userRepository.save(
                 User.builder()
@@ -70,7 +82,7 @@ public class UserService {
                 .name(user.getName())
                 .location(LocationUtil.createPoint(request.lat(), request.lnt()))
                 .phoneNumber(request.phoneNumber())
-                .role(Role.USER)
+                .role(Role.WALKER)
                 .build()
         );
 
