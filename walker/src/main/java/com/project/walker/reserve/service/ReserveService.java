@@ -56,6 +56,8 @@ public class ReserveService {
 
     @Transactional
     public WalkerServiceStatus accept(final AuthUser user, final Long reserveId, final WalkerServiceStatus status) {
+        userRepository.findByEmail(user.email())
+                .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
         final WalkerReserve reserve = walkerReserveRepository.findByIdAndStatus(reserveId, WalkerServiceStatus.WALKER_CHECKING)
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
         reserve.changeStatus(status);
