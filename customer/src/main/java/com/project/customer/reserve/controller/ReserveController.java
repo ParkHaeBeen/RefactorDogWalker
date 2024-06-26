@@ -3,6 +3,7 @@ package com.project.customer.reserve.controller;
 import com.project.core.common.interceptor.Auth;
 import com.project.core.common.resolver.auth.Authentication;
 import com.project.core.common.token.AuthUser;
+import com.project.core.domain.reserve.WalkerServiceStatus;
 import com.project.customer.reserve.dto.request.ReserveRequest;
 import com.project.customer.reserve.dto.response.ReserveDetailResponse;
 import com.project.customer.reserve.dto.response.ReserveListResponse;
@@ -53,11 +54,12 @@ public class ReserveController {
     @Operation(summary = "내 예약 리스트 조회")
     public ResponseEntity<List<ReserveListResponse>> readAll(
             @Authentication @Valid final AuthUser user,
+            @RequestParam(required = false) final WalkerServiceStatus status,
             @PageableDefault final Pageable pageable
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(reserveService.readAll(user, pageable));
+                .body(reserveService.readAll(user, status,pageable));
     }
 
     @GetMapping("/{reserveId}")

@@ -13,17 +13,15 @@ import com.project.customer.reserve.dto.request.ReserveRequest;
 import com.project.customer.reserve.dto.response.ReserveDetailResponse;
 import com.project.customer.reserve.dto.response.ReserveListResponse;
 import com.project.customer.reserve.dto.response.ReserveResponse;
-import com.project.customer.reserve.repository.PayHistoryRepository;
-import com.project.customer.user.repository.UserRepository;
-import com.project.customer.walkerSearch.repository.WalkerReserveRepository;
+import com.project.customer.repository.PayHistoryRepository;
+import com.project.customer.repository.UserRepository;
+import com.project.customer.repository.WalkerReserveRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
@@ -94,9 +92,17 @@ class ReserveServiceTest {
         User walker = UserFixture.WALKER_ONE.생성();
 
         WalkerReserve reserve = WalkerReserveFixture.WALKER_RESERVE_ONE.생성(user, walker);
+        PayHistory payHistory = PayHistory.builder()
+                .reserve(reserve)
+                .customer(user)
+                .price(reserve.getPrice())
+                .method("CARD")
+                .id(1L)
+                .build();
 
         given(userRepository.findByEmailAndRole(user.getEmail(), user.getRole())).willReturn(Optional.of(user));
         given(walkerReserveRepository.findByCustomerAndId(user, reserve.getId())).willReturn(Optional.of(reserve));
+        given(payHistoryRepository.findByReserve(reserve)).willReturn(Optional.of(payHistory));
 
         //when
         reserveService.cancel(authUser, reserve.getId());
@@ -113,15 +119,14 @@ class ReserveServiceTest {
         User walker = UserFixture.WALKER_ONE.생성();
 
         WalkerReserve reserve = WalkerReserveFixture.WALKER_RESERVE_ONE.생성(user, walker);
-        Page<WalkerReserve> reserveList = new PageImpl<>(List.of(reserve));
         given(userRepository.findByEmailAndRole(user.getEmail(), user.getRole())).willReturn(Optional.of(user));
-        given(walkerReserveRepository.findByCustomer(user, Pageable.unpaged())).willReturn(reserveList);
+        given(walkerReserveRepository.search(user, null, Pageable.unpaged())).willReturn(List.of(reserve));
 
         //when
-        List<ReserveListResponse> response = reserveService.readAll(authUser, Pageable.unpaged());
+        List<ReserveListResponse> response = reserveService.readAll(authUser, null, Pageable.unpaged());
 
         //then
-        Assertions.assertThat(response.size()).isEqualTo(reserveList.getSize());
+        Assertions.assertThat(response.size()).isEqualTo(1);
     }
 
     @Test

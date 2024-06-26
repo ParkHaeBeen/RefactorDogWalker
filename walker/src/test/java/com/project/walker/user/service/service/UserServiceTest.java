@@ -121,7 +121,8 @@ class UserServiceTest {
                 user.getName(),
                 "accessToken",
                 List.of(),
-                List.of(priceRequest1, priceRequest2)
+                List.of(priceRequest1, priceRequest2),
+                "email"
         );
 
         GoogleResponse googleResponse = GoogleResponse.builder()

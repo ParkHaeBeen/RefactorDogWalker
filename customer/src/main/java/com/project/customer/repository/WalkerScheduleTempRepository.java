@@ -1,4 +1,4 @@
-package com.project.customer.walkerSearch.repository;
+package com.project.customer.repository;
 
 import com.project.core.domain.user.walker.WalkerScheduleTemp;
 import org.springframework.data.jpa.repository.JpaRepository;

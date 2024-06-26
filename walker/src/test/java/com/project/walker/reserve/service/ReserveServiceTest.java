@@ -1,6 +1,7 @@
 package com.project.walker.reserve.service;
 
 import com.project.core.common.token.AuthUser;
+import com.project.core.domain.reserve.PayHistory;
 import com.project.core.domain.reserve.WalkerReserve;
 import com.project.core.domain.reserve.WalkerServiceStatus;
 import com.project.core.domain.user.User;
@@ -11,6 +12,7 @@ import com.project.walker.fixture.WalkerReserveFixture;
 import com.project.walker.reserve.dto.response.ReserveDetailResponse;
 import com.project.walker.reserve.dto.response.ReserveListResponse;
 import com.project.walker.reserve.repository.CustomerDogRepository;
+import com.project.walker.reserve.repository.PayHistoryRepository;
 import com.project.walker.reserve.repository.WalkerReserveRepository;
 import com.project.walker.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
@@ -41,6 +43,9 @@ class ReserveServiceTest {
 
     @Mock
     private CustomerDogRepository customerDogRepository;
+
+    @Mock
+    private PayHistoryRepository payHistoryRepository;
 
     @InjectMocks
     private ReserveService reserveService;
@@ -117,10 +122,17 @@ class ReserveServiceTest {
         User walker = UserFixture.WALKER_ONE.생성(authUser);
         User user = UserFixture.USER_ONE.생성();
         WalkerReserve reserve = WalkerReserveFixture.WALKER_RESERVE_ONE.생성(user, walker);
+        PayHistory payHistory = PayHistory.builder()
+                .reserve(reserve)
+                .customer(user)
+                .price(reserve.getPrice())
+                .method("CARD")
+                .id(1L)
+                .build();
 
         given(userRepository.findByEmail(walker.getEmail())).willReturn(Optional.of(walker));
         given(walkerReserveRepository.findByIdAndStatus(reserve.getId(), WalkerServiceStatus.WALKER_ACCEPT)).willReturn(Optional.of(reserve));
-
+        given(payHistoryRepository.findByReserve(reserve)).willReturn(Optional.of(payHistory));
         //when
         WalkerServiceStatus response = reserveService.cancel(authUser, reserve.getId());
 

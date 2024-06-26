@@ -1,4 +1,4 @@
-package com.project.customer.walkerSearch.repository;
+package com.project.customer.repository.queryDsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

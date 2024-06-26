@@ -4,14 +4,14 @@ import com.project.core.common.token.AuthUser;
 import com.project.core.domain.reserve.WalkerServiceStatus;
 import com.project.core.domain.user.User;
 import com.project.customer.exception.user.UserException;
-import com.project.customer.user.repository.UserRepository;
+import com.project.customer.repository.UserRepository;
 import com.project.customer.walkerSearch.dto.request.WalkerReserveRequest;
 import com.project.customer.walkerSearch.dto.request.WalkerSearchRequest;
 import com.project.customer.walkerSearch.dto.response.*;
-import com.project.customer.walkerSearch.repository.WalkerPriceRepository;
-import com.project.customer.walkerSearch.repository.WalkerReserveRepository;
-import com.project.customer.walkerSearch.repository.WalkerSchedulePermRepository;
-import com.project.customer.walkerSearch.repository.WalkerScheduleTempRepository;
+import com.project.customer.repository.WalkerPriceRepository;
+import com.project.customer.repository.WalkerReserveRepository;
+import com.project.customer.repository.WalkerSchedulePermRepository;
+import com.project.customer.repository.WalkerScheduleTempRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -81,7 +81,6 @@ public class WalkerSearchService {
 
     public List<WalkerReserveResponse> readReserve(final AuthUser user, final WalkerReserveRequest request) {
         final User walker = validateUser(user, request.id());
-        System.out.println("request = " + request.date().atStartOfDay()+" "+request.date().atTime(LocalTime.MAX));
         return walkerReserveRepository.findByWalkerAndStatusAndDateBetween(
                         walker
                         , WalkerServiceStatus.WALKER_ACCEPT
