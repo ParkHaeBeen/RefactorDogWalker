@@ -1,4 +1,4 @@
-package com.project.customer.reserve.repository;
+package com.project.customer.repository;
 
 import com.project.core.domain.reserve.PayHistory;
 import com.project.core.domain.reserve.WalkerReserve;

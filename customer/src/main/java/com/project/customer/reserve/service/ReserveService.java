@@ -3,6 +3,7 @@ package com.project.customer.reserve.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.core.common.token.AuthUser;
 import com.project.core.domain.reserve.PayHistory;
+import com.project.core.domain.reserve.QWalkerReserve;
 import com.project.core.domain.reserve.WalkerReserve;
 import com.project.core.domain.reserve.WalkerServiceStatus;
 import com.project.core.domain.user.User;
@@ -16,9 +17,10 @@ import com.project.customer.reserve.dto.request.ReserveRequest;
 import com.project.customer.reserve.dto.response.ReserveDetailResponse;
 import com.project.customer.reserve.dto.response.ReserveListResponse;
 import com.project.customer.reserve.dto.response.ReserveResponse;
-import com.project.customer.reserve.repository.PayHistoryRepository;
-import com.project.customer.user.repository.UserRepository;
-import com.project.customer.walkerSearch.repository.WalkerReserveRepository;
+import com.project.customer.repository.PayHistoryRepository;
+import com.project.customer.repository.UserRepository;
+import com.project.customer.repository.WalkerReserveRepository;
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -101,10 +103,11 @@ public class ReserveService {
         reserve.changeStatus(WalkerServiceStatus.CUSTOMER_CANCEL);
     }
 
-    public List<ReserveListResponse> readAll(final AuthUser user, final Pageable pageable) {
+    public List<ReserveListResponse> readAll(final AuthUser user, final WalkerServiceStatus status, final Pageable pageable) {
         final User customer = userRepository.findByEmailAndRole(user.email() , user.role())
                 .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
-        return walkerReserveRepository.findByCustomer(customer, pageable).getContent()
+
+        return walkerReserveRepository.search(customer, status, pageable)
                 .stream()
                 .map(ReserveListResponse::toResponse)
                 .toList();

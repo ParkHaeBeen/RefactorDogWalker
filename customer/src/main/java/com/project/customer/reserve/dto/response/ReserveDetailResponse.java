@@ -1,6 +1,7 @@
 package com.project.customer.reserve.dto.response;
 
 import com.project.core.domain.reserve.WalkerReserve;
+import com.project.core.domain.reserve.WalkerServiceStatus;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,8 @@ public record ReserveDetailResponse(
         Integer timeUnit,
         Integer price,
         Long walkerId,
-        String name
+        String name,
+        WalkerServiceStatus status
 ) {
     public static ReserveDetailResponse toResponse(final WalkerReserve reserve) {
         return new ReserveDetailResponse(
@@ -19,7 +21,8 @@ public record ReserveDetailResponse(
                 reserve.getTimeUnit(),
                 reserve.getPrice(),
                 reserve.getWalker().getId(),
-                reserve.getWalker().getName()
+                reserve.getWalker().getName(),
+                reserve.getStatus()
         );
     }
 }

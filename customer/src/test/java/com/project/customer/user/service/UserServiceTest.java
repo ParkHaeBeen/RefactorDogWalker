@@ -12,8 +12,8 @@ import com.project.customer.user.dto.request.UserJoinRequest;
 import com.project.customer.user.dto.response.UserJoinResponse;
 import com.project.customer.user.dto.response.UserLoginResponse;
 import com.project.customer.user.dto.response.UserTokenResponse;
-import com.project.customer.user.repository.CustomerDogRepository;
-import com.project.customer.user.repository.UserRepository;
+import com.project.customer.repository.CustomerDogRepository;
+import com.project.customer.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -125,7 +124,8 @@ class UserServiceTest {
                 LocalDate.now(),
                 "dogName",
                 "dogType",
-                "dogDescription"
+                "dogDescription",
+                "email"
         );
         CustomerDog dog = CustomerDog.builder()
                 .userId(user.getId())

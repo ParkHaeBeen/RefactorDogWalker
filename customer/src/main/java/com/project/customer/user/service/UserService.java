@@ -13,8 +13,8 @@ import com.project.customer.user.dto.request.UserJoinRequest;
 import com.project.customer.user.dto.response.UserJoinResponse;
 import com.project.customer.user.dto.response.UserLoginResponse;
 import com.project.customer.user.dto.response.UserTokenResponse;
-import com.project.customer.user.repository.CustomerDogRepository;
-import com.project.customer.user.repository.UserRepository;
+import com.project.customer.repository.CustomerDogRepository;
+import com.project.customer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,13 @@ public class UserService {
 
     @Transactional
     public UserLoginResponse login(final String code) {
-        final GoogleResponse response = oauth.login(code);
+        GoogleResponse response;
+        //TEMP : Oauth 없이 로그인할 수 있게
+        if(!code.contains("gmail.com")) {
+            response = oauth.login(code);
+        } else {
+            response = new GoogleResponse(code, "name", "token");
+        }
         final User user = userRepository.findByEmail(response.getEmail()).orElseThrow(
                 () -> new UserException(NOT_EXIST_MEMBER, response.getIdToken())
         );

@@ -10,27 +10,24 @@ import com.project.core.domain.user.walker.WalkerScheduleTemp;
 import com.project.customer.fixture.AuthUserFixture;
 import com.project.customer.fixture.UserFixture;
 import com.project.customer.fixture.WalkerReserveFixture;
-import com.project.customer.user.repository.UserRepository;
+import com.project.customer.repository.UserRepository;
 import com.project.customer.walkerSearch.dto.request.WalkerReserveRequest;
 import com.project.customer.walkerSearch.dto.request.WalkerSearchRequest;
 import com.project.customer.walkerSearch.dto.response.*;
-import com.project.customer.walkerSearch.repository.WalkerPriceRepository;
-import com.project.customer.walkerSearch.repository.WalkerReserveRepository;
-import com.project.customer.walkerSearch.repository.WalkerSchedulePermRepository;
-import com.project.customer.walkerSearch.repository.WalkerScheduleTempRepository;
+import com.project.customer.repository.WalkerPriceRepository;
+import com.project.customer.repository.WalkerReserveRepository;
+import com.project.customer.repository.WalkerSchedulePermRepository;
+import com.project.customer.repository.WalkerScheduleTempRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,11 +64,10 @@ class WalkerSearchServiceTest {
 
         User walker1 = UserFixture.WALKER_ONE.생성();
         User walker2 = UserFixture.WALKER_TWO.생성();
-        Page<User> walkers = new PageImpl<>(Arrays.asList(walker1, walker2));
 
         given(userRepository.findByEmailAndRole(authUser.email(), authUser.role())).willReturn(Optional.of(user));
         given(userRepository.findAllWithCircleAreaAndName(user.getLocation(), request.radius(), request.name(), Pageable.unpaged()))
-                .willReturn(walkers);
+                .willReturn(List.of(walker1, walker2));
 
         //when
         List<WalkerSearchResponse> response = walkerSearchService.readAll(authUser, request, Pageable.unpaged());
@@ -89,11 +85,10 @@ class WalkerSearchServiceTest {
 
         User walker1 = UserFixture.WALKER_ONE.생성();
         User walker2 = UserFixture.WALKER_TWO.생성();
-        Page<User> walkers = new PageImpl<>(Arrays.asList(walker1, walker2));
 
         given(userRepository.findByEmailAndRole(authUser.email(), authUser.role())).willReturn(Optional.of(user));
         given(userRepository.findAllWithCircleArea(user.getLocation(), request.radius(), Pageable.unpaged()))
-                .willReturn(walkers);
+                .willReturn(List.of(walker1, walker2));
 
         //when
         List<WalkerSearchResponse> response = walkerSearchService.readAll(authUser, request, Pageable.unpaged());
