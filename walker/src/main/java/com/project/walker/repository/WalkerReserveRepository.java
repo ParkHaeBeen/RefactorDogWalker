@@ -1,4 +1,4 @@
-package com.project.walker.reserve.repository;
+package com.project.walker.repository;
 
 import com.project.core.domain.reserve.WalkerReserve;
 import com.project.core.domain.reserve.WalkerServiceStatus;
@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface WalkerReserveRepository extends JpaRepository<WalkerReserve, Long> {
     Page<WalkerReserve> findByWalkerAndStatus(final User user, final WalkerServiceStatus status, final Pageable pageable);
     Optional<WalkerReserve> findByIdAndStatus(final Long id, final WalkerServiceStatus status);
+    Optional<WalkerReserve> findByIdAndWalkerAndStatus(final Long id, final User user, final WalkerServiceStatus status);
 }

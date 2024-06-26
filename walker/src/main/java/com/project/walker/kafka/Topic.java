@@ -2,7 +2,9 @@ package com.project.walker.kafka;
 
 
 public enum Topic {
-    RESERVE("dogWalker_reserve");
+    RESERVE("dogWalker_reserve"),
+    NOTICE("dogWalker_notice"),
+    ;
 
     public final String groupName;
 

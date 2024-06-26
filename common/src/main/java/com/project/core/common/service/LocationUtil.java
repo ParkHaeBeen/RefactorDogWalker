@@ -1,10 +1,9 @@
 package com.project.core.common.service;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.*;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class LocationUtil {
@@ -12,5 +11,10 @@ public class LocationUtil {
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
         Coordinate coordinate = new Coordinate(longitude, latitude);
         return geometryFactory.createPoint(coordinate);
+    }
+
+    public static MultiPoint createLineString(final List<Point> routes) {
+        final GeometryFactory geometryFactory = new GeometryFactory();
+        return geometryFactory.createMultiPoint(routes.toArray(new Point[0]));
     }
 }
