@@ -1,4 +1,4 @@
-package com.project.walker.reserve.repository;
+package com.project.walker.repository;
 
 import com.project.core.domain.user.customer.CustomerDog;
 import org.springframework.data.jpa.repository.JpaRepository;

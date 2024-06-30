@@ -1,4 +1,4 @@
-package com.project.walker.user.service.service;
+package com.project.walker.user.service;
 
 import com.project.core.common.oauth.GoogleOauth;
 import com.project.core.common.oauth.dto.GoogleResponse;
@@ -11,8 +11,8 @@ import com.project.walker.user.dto.request.UserJoinRequest;
 import com.project.walker.user.dto.response.UserJoinResponse;
 import com.project.walker.user.dto.response.UserLoginResponse;
 import com.project.walker.user.dto.response.UserTokenResponse;
-import com.project.walker.user.repository.UserRepository;
-import com.project.walker.user.repository.WalkerPriceRepository;
+import com.project.walker.repository.UserRepository;
+import com.project.walker.repository.WalkerPriceRepository;
 import com.project.walker.user.service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

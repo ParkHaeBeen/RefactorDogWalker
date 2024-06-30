@@ -10,10 +10,10 @@ import com.project.core.domain.user.customer.CustomerDog;
 import com.project.walker.exception.user.UserException;
 import com.project.walker.reserve.dto.response.ReserveDetailResponse;
 import com.project.walker.reserve.dto.response.ReserveListResponse;
-import com.project.walker.reserve.repository.CustomerDogRepository;
-import com.project.walker.reserve.repository.PayHistoryRepository;
-import com.project.walker.reserve.repository.WalkerReserveRepository;
-import com.project.walker.user.repository.UserRepository;
+import com.project.walker.repository.CustomerDogRepository;
+import com.project.walker.repository.PayHistoryRepository;
+import com.project.walker.repository.WalkerReserveRepository;
+import com.project.walker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class ReserveService {
     private final PayHistoryRepository payHistoryRepository;
 
     public List<ReserveListResponse> readAll(final AuthUser user, final WalkerServiceStatus status, final Pageable pageable) {
-        final User walker = userRepository.findByEmail(user.email())
+        final User walker = userRepository.findByEmailAndRole(user.email(), user.role())
                 .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
 
         return walkerReserveRepository.findByWalkerAndStatus(walker, status, pageable)
@@ -43,7 +43,7 @@ public class ReserveService {
     }
 
     public ReserveDetailResponse read(final AuthUser user, final Long reserveId) {
-        userRepository.findByEmail(user.email())
+        userRepository.findByEmailAndRole(user.email(), user.role())
                 .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
 
         final WalkerReserve reserve = walkerReserveRepository.findById(reserveId)
@@ -57,7 +57,7 @@ public class ReserveService {
 
     @Transactional
     public WalkerServiceStatus changeStatus(final AuthUser user, final Long reserveId, final WalkerServiceStatus status) {
-        userRepository.findByEmail(user.email())
+        userRepository.findByEmailAndRole(user.email(), user.role())
                 .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
         final WalkerReserve reserve = walkerReserveRepository.findByIdAndStatus(reserveId, WalkerServiceStatus.WALKER_CHECKING)
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
@@ -73,7 +73,7 @@ public class ReserveService {
 
     @Transactional
     public WalkerServiceStatus cancel(final AuthUser user, final Long reserveId) {
-        userRepository.findByEmail(user.email())
+        userRepository.findByEmailAndRole(user.email(), user.role())
                 .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
 
         final WalkerReserve reserve = walkerReserveRepository.findByIdAndStatus(reserveId, WalkerServiceStatus.WALKER_ACCEPT)

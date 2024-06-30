@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,22 +25,23 @@ public class RedisService {
           final String value,
           final long expiredTime
   ) {
-    redisTemplate.opsForValue().set(key, value, expiredTime);
+    redisTemplate.opsForValue().set(key, value);
+    redisTemplate.expire(key, expiredTime, TimeUnit.MINUTES);
   }
 
   public Object getData(final String key) {
     return redisTemplate.opsForValue().get(key);
   }
 
-  public void addList(final String key, final Coordinate coordinate) {
+  public void addList(final String key, final Point point) {
     try {
-      redisTemplate.opsForList().rightPush(key,objectMapper.writeValueAsString(coordinate));
+      redisTemplate.opsForList().rightPush(key,objectMapper.writeValueAsString(point));
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
   }
 
-  public List<Coordinate> getList(final String key) {
+  public List<Point> getList(final String key) {
     final RedisOperations<String, Object> routes = redisTemplate.opsForList().getOperations();
     final List <Object> list = routes.opsForList().range(key , 0 , -1);
 
@@ -50,7 +53,7 @@ public class RedisService {
         .map(obj->
             {
               try {
-                return objectMapper.readValue(obj.toString(),Coordinate.class);
+                return objectMapper.readValue(obj.toString(),Point.class);
               } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
               }
