@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +25,8 @@ public class RedisService {
           final String value,
           final long expiredTime
   ) {
-    redisTemplate.opsForValue().set(key, value, expiredTime);
+    redisTemplate.opsForValue().set(key, value);
+    redisTemplate.expire(key, expiredTime, TimeUnit.MINUTES);
   }
 
   public Object getData(final String key) {

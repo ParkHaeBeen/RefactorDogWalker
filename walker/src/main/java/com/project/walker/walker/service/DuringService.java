@@ -19,7 +19,6 @@ import com.project.walker.repository.UserRepository;
 import com.project.walker.repository.WalkerReserveRepository;
 import com.project.walker.repository.WalkerServiceRouteRepository;
 import com.project.walker.walker.dto.request.DuringWalkerLocationRequest;
-import com.project.walker.walker.dto.request.DuringWalkerStartRequest;
 import com.project.walker.walker.dto.response.DuringWalkerEndResponse;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.MultiPoint;
@@ -28,10 +27,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.project.walker.exception.ErrorCode.NOT_EXIST_MEMBER;
-import static com.project.walker.exception.ErrorCode.NOT_EXIST_RESERVE;
+import static com.project.walker.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,19 +45,25 @@ public class DuringService {
     private final String start = "ON";
     private final String proceedPrefix = "proceed-";
 
-    public boolean start(final AuthUser user, final DuringWalkerStartRequest request) {
+    public boolean start(final AuthUser user, final Long id) {
         final User walker = validateWalker(user);
 
-        if(isStarted(request.id(), walker.getId())) {
+        if(isStarted(id, walker.getId())) {
             throw new DuringException(ErrorCode.RESERVE_PROCESS);
         }
 
         final WalkerReserve reserve = walkerReserveRepository
-                .findByIdAndWalkerAndStatus(request.id(), walker, WalkerServiceStatus.WALKER_CHECKING)
+                .findByIdAndWalkerAndStatus(id, walker, WalkerServiceStatus.WALKER_ACCEPT)
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
 
-        final Duration diff = Duration.between(request.date().toLocalTime(), reserve.getDate().toLocalTime());
-        return diff.toMinutes() <= 60;
+        final Duration diff = Duration.between(LocalDateTime.now().toLocalTime(), reserve.getDate().toLocalTime());
+
+        if(diff.toMinutes() <= 60) {
+            redisService.addData(generateKey(starPrefix, reserve.getId(), walker.getId()), start, reserve.getTimeUnit());
+            return true;
+        }
+
+        return false;
     }
 
     private boolean isStarted(final Long reserveId, final Long walkerId) {
@@ -83,8 +88,8 @@ public class DuringService {
         final WalkerReserve reserve = walkerReserveRepository.findByIdAndWalkerAndStatus(request.id(), walker, WalkerServiceStatus.WALKER_ACCEPT)
                 .orElseThrow(() -> new ReserveException(NOT_EXIST_RESERVE));
 
-        Point point = LocationUtil.createPoint(request.lat(), request.lnt());
-        redisService.addList(generateKey(proceedPrefix, request.id(), walker.getId()), point);
+        final Point point = LocationUtil.createPoint(request.lat(), request.lnt());
+        redisService.addList(generateKey(proceedPrefix, reserve.getId(), walker.getId()), point);
     }
 
     public void notice(final AuthUser user, final Long id) {
@@ -108,15 +113,16 @@ public class DuringService {
         }
 
         final MultiPoint lineString = LocationUtil.createLineString(routes);
-
         walkerServiceRouteRepository.save(
-                WalkerServiceRoute.builder()
-                        .reserve(reserve)
-                        .routes(lineString)
-                        .build()
+                reserve.getId(),
+                lineString.toString()
         );
 
-        return null;
+        reserve.changeStatus(WalkerServiceStatus.FINISH);
+        final WalkerServiceRoute route = walkerServiceRouteRepository.findByReserve(reserve)
+                .orElseThrow(() -> new DuringException(NOT_FOUND_ROUTE));
+
+        return DuringWalkerEndResponse.toResponse(route, LocationUtil.createLocation(lineString.toString()));
     }
 
     private void sendKafka(final WalkerReserve reserve, final User walker) {
@@ -130,7 +136,7 @@ public class DuringService {
         }
     }
 
-    private User validateWalker(AuthUser user) {
+    private User validateWalker(final AuthUser user) {
         return userRepository.findByEmailAndRole(user.email() , user.role())
                 .orElseThrow(() -> new UserException(NOT_EXIST_MEMBER));
     }

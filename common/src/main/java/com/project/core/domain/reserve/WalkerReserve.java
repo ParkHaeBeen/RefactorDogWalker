@@ -13,12 +13,7 @@ import static com.project.core.domain.reserve.WalkerServiceStatus.WALKER_CHECKIN
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@Table(name = "walker_reserve",uniqueConstraints={
-    @UniqueConstraint(
-        name="unique_walker_datetime",
-        columnNames={"walker_id", "date"}
-    )
-})
+@Table(name = "walker_reserve")
 public class WalkerReserve extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

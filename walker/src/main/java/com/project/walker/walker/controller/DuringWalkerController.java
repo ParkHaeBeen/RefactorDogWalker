@@ -26,11 +26,11 @@ public class DuringWalkerController {
     @Operation(summary = "서비스 시작")
     public ResponseEntity<Boolean> start(
             @Authentication @Valid final AuthUser user,
-            @QueryStringResolver @Valid final DuringWalkerStartRequest request
+            @RequestParam final Long reserveId
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(duringService.start(user, request));
+                .body(duringService.start(user, reserveId));
     }
 
     @GetMapping
@@ -56,7 +56,7 @@ public class DuringWalkerController {
                 .build();
     }
 
-    @PatchMapping("/notice")
+    @PostMapping("/notice")
     @Operation(summary = "고객에게 완료 5분전 알림")
     public ResponseEntity<Void> notice(
             @Authentication @Valid final AuthUser user,

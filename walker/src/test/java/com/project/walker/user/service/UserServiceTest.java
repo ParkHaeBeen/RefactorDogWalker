@@ -1,4 +1,4 @@
-package com.project.walker.user.service.service;
+package com.project.walker.user.service;
 
 import com.project.core.common.oauth.GoogleOauth;
 import com.project.core.common.oauth.dto.GoogleResponse;
