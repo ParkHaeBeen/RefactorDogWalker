@@ -66,6 +66,12 @@ public class DuringService {
         return false;
     }
 
+    public boolean checkStart(final AuthUser user, final Long id) {
+        final User walker = validateWalker(user);
+
+        return isStarted(id, walker.getId());
+    }
+
     private boolean isStarted(final Long reserveId, final Long walkerId) {
         final Object isStarted = redisService.getData(generateKey(starPrefix, reserveId, walkerId));
 
@@ -74,12 +80,6 @@ public class DuringService {
         }
 
         return false;
-    }
-
-    public boolean checkStart(final AuthUser user, final Long id) {
-        final User walker = validateWalker(user);
-
-        return isStarted(id, walker.getId());
     }
 
     @Transactional
